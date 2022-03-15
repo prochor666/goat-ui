@@ -571,6 +571,14 @@ export default {
         user.password = '';
         user.confirm_password = '';
 
+        if (user.id == 0) {
+
+            for (let role in roles.roles) {
+                user.role = role;
+                break;
+            }
+        }
+
         const breadCrumbs = [{
             name: 'Users',
             route: {
@@ -578,7 +586,7 @@ export default {
             }
         },];
 
-        console.log(user, roles);
+        console.log('User', user, 'Roles', roles.roles);
 
         const test = ref(false);
 

@@ -24,10 +24,18 @@ export const useUsers = function () {
 
             modUser.active = modUser.active ? 1 : 0;
 
-            if (modUser.password.length > 0 && modUser.confirm_password.length > 0) {
+            if (parseInt(modUser.id) > 0) {
 
-                requestMethod = 'put';
-                searchKey = 'updated';
+                if (modUser.password.length > 0 && modUser.confirm_password.length > 0) {
+
+                    requestMethod = 'put';
+                    searchKey = 'updated';
+                }
+
+            } else {
+
+                requestMethod = 'post';
+                searchKey = 'created';
             }
 
             saving.status = true;
@@ -52,7 +60,7 @@ export const useUsers = function () {
 
             let state = await result.data;
 
-            console.log('Save result state', state);
+            console.log('Save result state', result);
 
             saving.status = false;
 
@@ -97,9 +105,9 @@ export const useUsers = function () {
             confirm_password: '',
             firstname: '',
             lastname: '',
-            role: 'user',
+            role: '',
             token: '',
-            auth2: '000000',
+            auth2: '',
             active: false,
         };
 
