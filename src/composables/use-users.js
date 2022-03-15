@@ -4,12 +4,12 @@ import { notify } from 'notiwind';
 import utils from '../composables/utils';
 import serverResponse from '../composables/use-server-response';
 
-let user = reactive(new Set());
-let saving = reactive(new Set());
+const user = reactive(new Set());
+const saving = reactive(new Set());
 
 export const useUsers = function () {
 
-    let save = async function (saving, user, router) {
+    const save = async function (saving, user, router) {
 
         try {
 
@@ -21,6 +21,8 @@ export const useUsers = function () {
 
             let requestMethod = 'patch';
             let searchKey = 'patched';
+
+            modUser.active = modUser.active ? 1 : 0;
 
             if (modUser.password.length > 0 && modUser.confirm_password.length > 0) {
 
@@ -79,13 +81,20 @@ export const useUsers = function () {
     };
 
 
-    let load = async function (id) {
+    const roles = async function () {
+
+        return await utils().loadHelper('roles');
+    };
+
+
+    const load = async function (id) {
 
         let user = {
             id: 0,
             username: '',
             email: '',
             password: '',
+            confirm_password: '',
             firstname: '',
             lastname: '',
             role: 'user',
@@ -116,6 +125,7 @@ export const useUsers = function () {
 
     return {
         user,
+        roles,
         saving,
         save,
         load,

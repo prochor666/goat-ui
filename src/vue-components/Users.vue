@@ -145,7 +145,7 @@
                                                         dark:text-red-600
                                                     "
                                                     aria-hidden="true"
-                                                    v-if="user.public == 0"
+                                                    v-if="user.active == 0"
                                                 />
                                                 <CheckCircleIcon
                                                     class="
@@ -153,12 +153,12 @@
                                                         mr-1.5
                                                         h-5
                                                         w-5
-                                                        text-emerald-400
                                                     "
+                                                    :class="[user.role == 'restricted' ? 'text-amber-500 dark:text-amber-500': 'text-emerald-400', '']"
                                                     aria-hidden="true"
-                                                    v-if="user.public == 1"
+                                                    v-if="user.active == 1"
                                                 />
-                                                {{ user.public == 1 ? 'Published': 'Draft' }}
+                                                {{ roles.roles[user.role].name }} {{ user.active == 1 ? '/ login enabled': '/ login disabled' }}
                                             </p>
                                         </div>
                                     </div>
@@ -210,6 +210,7 @@ import {
     ServerIcon,
 } from '@heroicons/vue/outline';
 
+
 export default {
     components: {
         MainMenu,
@@ -243,7 +244,8 @@ export default {
             let data = await r.data.data;
             return data;
         };
-        let users = await usersLoad();
+        const users = await usersLoad();
+        const roles = await useUsers().roles();
 
         Pagination.options.total = Math.ceil(users.length / Pagination.options.perPage);
         Pagination.options.items = users;
@@ -259,6 +261,7 @@ export default {
 
         return {
             router,
+            roles,
             Pagination,
             breadCrumbs,
         };

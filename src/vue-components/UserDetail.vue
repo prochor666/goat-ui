@@ -184,7 +184,7 @@
                                     name="password"
                                     type="password"
                                     autocomplete="password"
-                                    :class="[saving.result.required.password === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
+                                    :class="[saving.result.required.password === false || user.password !== user.confirm_password ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                     v-model="user.password"
                                 />
                             </div>
@@ -220,7 +220,7 @@
                                     name="confirm_password"
                                     type="password"
                                     autocomplete="Confirm password"
-                                    :class="[saving.result.required.password === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
+                                    :class="[saving.result.required.password === false || user.password !== user.confirm_password ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                     v-model="user.confirm_password"
                                 />
                             </div>
@@ -272,7 +272,7 @@
                                     "
                                     v-model="user.role"
                                 >
-                                    <option v-for="role in roles" :key="role.role" :value="role.role">{{ role.name }}</option>
+                                    <option v-for="role, index in roles.roles" :key="index" :value="index">{{ role.name }}</option>
                                 </select>
                             </div>
                         </div>
@@ -310,12 +310,12 @@
 
                                     <span class="flex-grow flex flex-col ml-4" v-if="user.active">
                                         <SwitchLabel as="span" class="text-sm font-medium text-emerald-700 select-none" passive>Active</SwitchLabel>
-                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">User is enabled.</SwitchDescription>
+                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Login is enabled.</SwitchDescription>
                                     </span>
 
                                     <span class="flex-grow flex flex-col ml-4" v-if="!user.active">
                                         <SwitchLabel as="span" class="text-sm font-medium text-red-500 select-none" passive>Not active</SwitchLabel>
-                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">User is disabled.</SwitchDescription>
+                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Login is disabled.</SwitchDescription>
                                     </span>
                                 </SwitchGroup>
 
@@ -472,8 +472,8 @@
                         </button>
                         <button
                             type="button"
-                            :class="[saving.status === true ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
-                            :disabled="saving.status === true"
+                            :class="[saving.status === true || user.password != user.confirm_password ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
+                            :disabled="saving.status === true || user.password != user.confirm_password"
                             @click="useUsers.save(saving, user, router)"
                         >
                             <CheckIcon v-if="!saving.status"
@@ -523,16 +523,6 @@ import {
     RefreshIcon,
 } from '@heroicons/vue/outline';
 
-const roles = [
-    {
-        name: 'Admin',
-        role: 'admin',
-    },
-    {
-        name: 'User',
-        role: 'user',
-    },
-];
 
 export default {
     components: {
@@ -575,7 +565,8 @@ export default {
             },
         });
 
-        let user = reactive(await useUsers().load(id));
+        const user = reactive(await useUsers().load(id));
+        const roles = await useUsers().roles();
 
         user.password = '';
         user.confirm_password = '';
@@ -587,7 +578,7 @@ export default {
             }
         },];
 
-        console.log(user);
+        console.log(user, roles);
 
         const test = ref(false);
 
