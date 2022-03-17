@@ -26,9 +26,9 @@ export const autoLogin = async (apiUrl) => {
 
             const auth = await r.data;
 
-            //console.log('Auto login', auth);
             if (typeof (auth) === 'object' && auth.data.user.id && auth.data.user.id > 0) {
 
+                //console.log('Auto login', auth.data.user);
                 loginInfo.logged = true;
                 loginInfo.profile = auth.data.user;
                 loginInfo.ip = auth.data.ip;

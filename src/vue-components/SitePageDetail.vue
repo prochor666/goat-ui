@@ -45,24 +45,29 @@
                         <time
                             :datetime="page.created_at">{{ $dayjs(page.created_at).format('D. M. YYYY HH:mm') }}</time>
                     </div>
-                    <div class="mt-4 sm:mt-2 items-center text-sm text-gray-500 flex-1 grow sm:justify-items-end">
 
-                        <SwitchGroup as="div" class="flex items-center sm:justify-end">
-                            <Switch v-model="page.public" :class="[page.public ? 'bg-emerald-600' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
-                                <span aria-hidden="true" :class="[page.public ? 'translate-x-5 bg-emerald-200 dark:bg-emerald-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
-                            </Switch>
+                </div>
 
-                            <span class="w-32 flex flex-col ml-4" v-if="page.public">
-                                <SwitchLabel as="span" class="text-sm font-medium text-emerald-700 select-none" passive>Enabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is active.</SwitchDescription>
-                            </span>
+            </div>
+            <div class="mt-4 sm:mt-2 flex xl:ml-4">
 
-                            <span class="w-32 flex flex-col ml-4" v-if="!page.public">
-                                <SwitchLabel as="span" class="text-sm font-medium text-red-500 select-none" passive>Disabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is not active.</SwitchDescription>
-                            </span>
-                        </SwitchGroup>
-                    </div>
+                <div class="items-center text-sm text-gray-500 flex-1 grow sm:justify-items-end">
+
+                    <SwitchGroup as="div" class="flex items-center sm:justify-end">
+                        <Switch v-model="page.public" :class="[page.public ? 'bg-emerald-600' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
+                            <span aria-hidden="true" :class="[page.public ? 'translate-x-5 bg-emerald-200 dark:bg-emerald-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
+                        </Switch>
+
+                        <span class="w-32 flex flex-col ml-4" v-if="page.public">
+                            <SwitchLabel as="span" class="text-sm font-medium text-emerald-700 select-none" passive>Enabled</SwitchLabel>
+                            <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is active.</SwitchDescription>
+                        </span>
+
+                        <span class="w-32 flex flex-col ml-4" v-if="!page.public">
+                            <SwitchLabel as="span" class="text-sm font-medium text-red-500 select-none" passive>Disabled</SwitchLabel>
+                            <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is not active.</SwitchDescription>
+                        </span>
+                    </SwitchGroup>
                 </div>
 
             </div>
@@ -387,7 +392,7 @@
                                     sm:pt-2
                                 "
                             >
-                                Nav visibility
+                                Page visibility
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
 
@@ -739,7 +744,7 @@ export default {
         const page = await usePages().load(id, site.id);
 
         const navsLoad = async function() {
-            const r = await axios.get(`${apiUrl}/api/navs/?domains_id=${domains_id}&_worder[]=order|ASC&_worder[]=name|ASC`, {
+            const r = await axios.get(`${apiUrl}/api/navs/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=name|ASC`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'

@@ -100,9 +100,8 @@
                                     <div>
                                         <p
                                             class="
-                                                text-sm
                                                 font-medium
-                                                text-sky-600
+                                                text-sky-500
                                                 dark:text-sky-500
                                                 truncate
                                             "

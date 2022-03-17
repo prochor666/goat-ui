@@ -291,6 +291,18 @@ export default {
         const user = route.meta.user;
         let searchQuery = ref('');
 
+        let navigation = navigator.navs.notLoggedIn;
+
+        console.log('I am', user.profile.role);
+
+        if (user.logged === true) {
+
+            if (user.profile.role in navigator.navs) {
+
+                navigation = navigator.navs[user.profile.role];
+            }
+        }
+
         const routeSearch = function() {
             if (searchQuery.value.length > 1) {
                 document.location.href = `/search/${searchQuery.value}`
@@ -298,13 +310,13 @@ export default {
                 notify({
                     group: "error",
                     title: "Error",
-                    text: "Search query minimum length is 2 characters)",
+                    text: "Search query minimum length is 2 characters",
                 }, 5000);
             }
         };
 
         return {
-            navigation: user.logged ? navigator.logged: navigator.notLogged,
+            navigation,
             open,
             search,
             router,

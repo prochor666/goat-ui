@@ -13,35 +13,61 @@ const mainMenu = function () {
         return false;
     };
 
-    const navigation = [
+    const mainNavigationAdmin = [
         { name: 'Dashboard', href: 'dashboard', match: ['dashboard'] },
         { name: 'Sites', href: 'sites', match: ['sites', 'site-detail', 'navs', 'pages', 'page-detail', 'nav-detail', 'files', 'meta', 'meta-detail'] },
-        { name: 'Users', href: 'users' },
+        { name: 'Users', href: 'users', match: ['users', 'user-detail'] },
     ];
-    const userNavigation = [
+    const mainNavigationUser = [
+        { name: 'Dashboard', href: 'dashboard', match: ['dashboard'] },
+        { name: 'Sites', href: 'sites', match: ['sites', 'site-detail', 'navs', 'pages', 'page-detail', 'nav-detail', 'files', 'meta', 'meta-detail'] },
+    ];
+    const mainNavigationRestricted = [
+        { name: 'Dashboard', href: 'dashboard', match: ['dashboard'] },
+    ];
+    const sideNavigation = [
         { name: 'Your Profile', href: 'profile', match: ['profile'] },
         { name: 'Settings', href: 'settings', match: ['settings'] },
         { name: 'Logout', href: 'logout', match: ['logout'] },
     ];
-
-    const userNavigationNotLogged = [
+    const sideNavigationRestricted = [
+        { name: 'Your Profile', href: 'profile', match: ['profile'] },
+        { name: 'Settings', href: 'settings', match: ['settings'] },
+        { name: 'Logout', href: 'logout', match: ['logout'] },
+    ];
+    const sideNavigationNotLogged = [
         { name: 'Recover', href: 'recover', match: ['recover'] },
         { name: 'Login', href: 'login', match: ['login'] },
     ];
 
     return {
         currentRouteMatch,
-        logged: {
-            left: navigation,
-            search: true,
-            notify: true,
-            right: userNavigation,
-        },
-        notLogged: {
-            left: [],
-            search: false,
-            notify: false,
-            right: userNavigationNotLogged,
+
+        navs: {
+            admin: {
+                left: mainNavigationAdmin,
+                search: true,
+                notify: true,
+                right: sideNavigation,
+            },
+            user: {
+                left: mainNavigationUser,
+                search: true,
+                notify: true,
+                right: sideNavigation,
+            },
+            restricted: {
+                left: mainNavigationRestricted,
+                search: true,
+                notify: true,
+                right: sideNavigationRestricted,
+            },
+            notLoggedIn: {
+                left: [],
+                search: false,
+                notify: false,
+                right: sideNavigationNotLogged,
+            }
         }
     }
 };

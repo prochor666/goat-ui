@@ -242,12 +242,19 @@ export default {
 
             const auth = await res.data;
 
-            console.log('Auth', res);
+            console.log('Login info', auth);
 
             if (typeof (auth) === 'object' && auth.data.user.id && auth.data.user.id > 0) {
 
                 localStorage.setItem('session_id', auth.data.ssid);
                 router.push('/');
+            } else {
+
+                notify({
+                    group: "error",
+                    title: "Error",
+                    text: "Can not login, check your username and password",
+                }, 5000);
             }
         };
 

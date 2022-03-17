@@ -49,7 +49,7 @@
                 </div>
 
             </div>
-            <div class="mt-5 flex xl:mt-0 xl:ml-4">
+            <div class="mt-4 sm:mt-2 flex xl:ml-4">
                 <span class="block">
                     <button
                         type="button"

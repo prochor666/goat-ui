@@ -100,9 +100,8 @@
                                     <div>
                                         <p
                                             class="
-                                                text-sm
                                                 font-medium
-                                                text-sky-600
+                                                text-sky-500
                                                 dark:text-sky-500
                                                 truncate
                                             "
@@ -118,7 +117,8 @@
                                                 dark:text-gray-400
                                             "
                                         >
-                                            <span class="truncate mr-2">{{ user.email }}</span>
+                                            <span v-if="user.firstname.length > 0 || user.lastname.length > 0"
+                                                class="text-gray-900 dark:text-gray-500">{{ user.firstname }} {{ user.lastname }}</span>
                                         </p>
                                     </div>
                                     <div class="hidden md:block">
@@ -154,7 +154,7 @@
                                                         h-5
                                                         w-5
                                                     "
-                                                    :class="[user.role == 'restricted' ? 'text-amber-500 dark:text-amber-500': 'text-emerald-400', '']"
+                                                    :class="[user.role == 'restricted' ? 'text-amber-500 dark:text-amber-500': 'text-emerald-400 dark:text-emerald-500', '']"
                                                     aria-hidden="true"
                                                     v-if="user.active == 1"
                                                 />
