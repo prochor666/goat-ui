@@ -111,7 +111,7 @@
                                         type="text"
                                         name="username"
                                         id="username"
-                                        autocomplete="username"
+                                        autocomplete="off"
                                         :class="[saving.result.required.username === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                         v-model="user.username"
                                     />
@@ -147,7 +147,7 @@
                                     id="email"
                                     name="email"
                                     type="email"
-                                    autocomplete="email"
+                                    autocomplete="off"
                                     :class="[saving.result.required.email === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                     v-model="user.email"
                                 />
@@ -183,7 +183,7 @@
                                     id="password"
                                     name="password"
                                     type="password"
-                                    autocomplete="password"
+                                    autocomplete="off"
                                     :class="[saving.result.required.password === false || user.password !== user.confirm_password ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                     v-model="user.password"
                                 />
@@ -219,7 +219,7 @@
                                     id="confirm_password"
                                     name="confirm_password"
                                     type="password"
-                                    autocomplete="Confirm password"
+                                    autocomplete="off"
                                     :class="[saving.result.required.password === false || user.password !== user.confirm_password ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
                                     v-model="user.confirm_password"
                                 />
@@ -370,7 +370,7 @@
                                     type="text"
                                     name="first_name"
                                     id="first_name"
-                                    autocomplete="given-name"
+                                    autocomplete="off"
                                     class="
                                         max-w-lg
                                         block
@@ -418,7 +418,7 @@
                                     type="text"
                                     name="last_name"
                                     id="last_name"
-                                    autocomplete="family-name"
+                                    autocomplete="off"
                                     class="
                                         max-w-lg
                                         block
