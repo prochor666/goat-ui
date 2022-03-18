@@ -28,25 +28,25 @@ import autoLogin from './composables/auto-login';
 import './index.css';
 
 const routes = [
-    { path: '/', component: Dashboard, name: 'dashboard' },
-    { path: '/sites', component: Sites, name: 'sites' },
-    { path: '/users', component: Users, name: 'users' },
-    { path: '/users/:userid', component: UserDetail, name: 'user-detail' },
-    { path: '/site-detail/:id', component: SiteDetail, name: 'site-detail' },
-    { path: '/sites/:id/pages', component: SitePages, name: 'pages' },
-    { path: '/sites/:id/pages/:pageid', component: SitePageDetail, name: 'page-detail' },
-    { path: '/sites/:id/pages/:pageid/posts', component: SitePagePosts, name: 'posts' },
-    { path: '/sites/:id/pages/:pageid/posts/:postid', component: SitePagePostDetail, name: 'post-detail' },
-    { path: '/sites/:id/files/:path?', component: SiteFilemanager, name: 'files' },
-    { path: '/sites/:id/meta', component: SiteMeta, name: 'meta' },
-    { path: '/sites/:id/meta/:metaid', component: SiteMetaDetail, name: 'meta-detail' },
-    { path: '/sites/:id/navs', component: SiteNavs, name: 'navs' },
-    { path: '/sites/:id/navs/:navid', component: SiteNavDetail, name: 'nav-detail' },
-    { path: '/profile', component: Profile, name: 'profile' },
-    { path: '/settings', component: Settings, name: 'settings' },
-    { path: '/login', component: Login, name: 'login' },
-    { path: '/logout', component: Logout, name: 'logout' },
-    { path: '/recover', component: Recover, name: 'recover' },
+    { path: '/', component: Dashboard, name: 'dashboard', meta: { requiredRoles: ['restricted', 'user', 'admin'] } },
+    { path: '/sites', component: Sites, name: 'sites', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/users', component: Users, name: 'users', meta: { requiredRoles: ['admin'] } },
+    { path: '/users/:userid', component: UserDetail, name: 'user-detail', meta: { requiredRoles: ['admin'] } },
+    { path: '/site-detail/:id', component: SiteDetail, name: 'site-detail', meta: { requiredRoles: ['admin'] } },
+    { path: '/sites/:id/pages', component: SitePages, name: 'pages', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/pages/:pageid', component: SitePageDetail, name: 'page-detail', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/pages/:pageid/posts', component: SitePagePosts, name: 'posts', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/pages/:pageid/posts/:postid', component: SitePagePostDetail, name: 'post-detail', meta: { requiredRoles: ['user', 'admin'] }},
+    { path: '/sites/:id/files/:path?', component: SiteFilemanager, name: 'files', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/meta', component: SiteMeta, name: 'meta', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/meta/:metaid', component: SiteMetaDetail, name: 'meta-detail', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/navs', component: SiteNavs, name: 'navs', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/sites/:id/navs/:navid', component: SiteNavDetail, name: 'nav-detail', meta: { requiredRoles: ['user', 'admin'] } },
+    { path: '/profile', component: Profile, name: 'profile', meta: { requiredRoles: ['restricted', 'user', 'admin'] } },
+    { path: '/settings', component: Settings, name: 'settings', meta: { requiredRoles: ['restricted', 'user', 'admin'] } },
+    { path: '/login', component: Login, name: 'login', meta: { requiredRoles: ['notlogged', 'restricted', 'user', 'admin'] } },
+    { path: '/logout', component: Logout, name: 'logout', meta: { requiredRoles: ['restricted', 'user', 'admin'] } },
+    { path: '/recover', component: Recover, name: 'recover', meta: { requiredRoles: ['notlogged', 'restricted', 'user', 'admin'] } },
 ];
 
 const router = createRouter({
@@ -62,17 +62,14 @@ router.beforeEach(async (to, from) => {
     to.meta.user = await autoLogin(apiUrl);
     to.meta.apiUrl = apiUrl;
 
-    if (!['recover', 'login'].includes(to.name)) {
+    if (to.meta.requiredRoles.includes(to.meta.user.profile.role)) {
 
-        if (!to.meta.user.logged) {
-
-            return '/login';
-        }
-
+        console.log(`I am ${to.meta.user.profile.role} at ${to.path} , it's allowed, required`, to.meta.requiredRoles);
+        return true;
     } else {
 
-        //console.log(`route ${to.path} doesn't require login`);
-        return true;
+        console.log(`I am ${to.meta.user.profile.role} at ${to.path} , it's not allowed, required`, to.meta.requiredRoles);
+        return '/login';
     }
 });
 

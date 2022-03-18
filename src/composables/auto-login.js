@@ -2,11 +2,19 @@ import axios from 'axios';
 
 export const autoLogin = async (apiUrl) => {
 
+
+    const checkRequiredRole = function (role, meta) {
+
+        return meta.requiredRoles.includes(role);
+    };
+
+
     const loginInfo = {
         logged: false,
         profile: {
             id: 0,
             username: '',
+            role: 'notlogged',
         },
         ip: '',
     };
@@ -38,8 +46,6 @@ export const autoLogin = async (apiUrl) => {
 
         console.log('Login error', e);
     }
-
-
 
     return loginInfo;
 };

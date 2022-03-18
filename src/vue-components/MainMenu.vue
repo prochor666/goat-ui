@@ -293,7 +293,7 @@ export default {
 
         let navigation = navigator.navs.notLoggedIn;
 
-        console.log('I am', user.profile.role);
+        //console.log('I am', user.profile.role);
 
         if (user.logged === true) {
 

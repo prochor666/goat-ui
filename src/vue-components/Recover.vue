@@ -87,8 +87,8 @@
                         type="text"
                         name="username"
                         autocomplete="off"
-                        v-model="username"
-                        @keyup.enter="softRecovery"
+                        v-model="user.profile.username"
+                        @keyup.enter="recoverAccount"
                     />
                 </div>
             </div>
@@ -117,7 +117,7 @@
                             focus:ring-2
                             focus:ring-sky-500
                         "
-                        @click="softRecovery"
+                        @click="recoverAccount"
                     >
                         Send activation
                     </button>
@@ -145,54 +145,6 @@ import {
     KeyIcon,
 } from '@heroicons/vue/solid';
 
-const username = ref('');
-
-const softRecovery = () => {
-    console.log(`User ${username.value}`);
-    const href = window.location.href.split('/');
-    const apiUrl = localStorage.getItem('apiUrl') || '';
-
-    //console.log(`${href[0]}/${href[1]}/${href[2]}`);
-
-    const res = axios.post(`${apiUrl}/api/soft_recovery`, {
-               username: username.value,
-               http_origin: `${href[0]}/${href[1]}/${href[2]}`,
-           }, {
-            headers: {
-                'content-type': 'application/json'
-            },
-        })
-        .then((res) => {
-            let authorize = res.data;
-            //console.log(authorize);
-
-            if (typeof (authorize) === 'object' && authorize.result.status === true) {
-
-                console.log(`${authorize.result.message}`);
-            } else if (typeof (authorize) === 'object' && authorize.result.status === false) {
-
-                console.log(`${authorize.result.message}`);
-            }
-
-            notify({
-                group: authorize.result.status ? "success" : "error",
-                title: authorize.result.status ? "Done" : "Error",
-                text: authorize.result.message,
-            }, 5000);
-
-    }).catch((e) => {
-
-        notify({
-            group: "error",
-            title: "Error",
-            text: "Network error",
-        }, 5000);
-
-
-        console.log(e);
-    });
-};
-
 export default {
     components: {
         MainMenu,
@@ -204,10 +156,16 @@ export default {
 
     setup() {
         const route = useRoute();
+        const user = route.meta.user;
+
+        const recoverAccount = function() {
+
+            return true;
+        };
 
         return {
-            username,
-            softRecovery,
+            user,
+            recoverAccount,
         };
     },
 };

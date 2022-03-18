@@ -27,6 +27,16 @@ export default {
 };
 </script>
 <style>
+input:autofill {
+  filter: none;
+  background: none; /* or any other */
+}
+
+:-moz-autofill, :-moz-autofill-preview {
+  filter: none;
+  background: none;
+}
+
 * {
     --scrollbarBG: rgb(230, 230, 230);
     --thumbBG: rgb(160, 160, 160);

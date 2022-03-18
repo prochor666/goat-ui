@@ -85,6 +85,7 @@
                             dark:bg-gray-900
                             dark:border-gray-700
                         "
+                        autocomplete="off"
                         placeholder="Username or email"
                         type="text"
                         name="ulc"
@@ -153,6 +154,7 @@
                         placeholder="password"
                         type="password"
                         name="password"
+                        autocomplete="off"
                         v-model.number="password"
                         @keyup.enter="loginUser"
                     />
