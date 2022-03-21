@@ -188,6 +188,10 @@
                         "
                         @click="loginUser"
                     >
+                        <LockOpenIcon
+                            class="-ml-1 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                        />
                         Authorize
                     </button>
                 </div>
@@ -209,6 +213,7 @@ import { notify } from 'notiwind';
 
 import {
     KeyIcon,
+    LockOpenIcon,
     UserIcon,
 } from '@heroicons/vue/solid';
 
@@ -217,6 +222,7 @@ export default {
         MainMenu,
         PageTitle,
         KeyIcon,
+        LockOpenIcon,
         UserIcon,
     },
     setup() {

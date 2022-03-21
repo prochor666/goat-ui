@@ -16,20 +16,17 @@
             "
         >
             <div class="w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-400">
-                    Activate client device
-                </h3>
+
+                <PageTitle title="Password recovery" />
+
             </div>
         </div>
     </header>
 
     <main class="pt-8 pb-16">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-gray-400 my-4">
-                To activate your device, enter your user information
-            </h3>
+        <div class="min-w-fit max-w-md mx-auto sm:px-6 lg:px-8">
 
-            <div class="w-full lg:max-w-md">
+            <div class="pt-8 pb-8">
                 <label for="username" class="
                         text-gray-700
                         dark:text-gray-400
@@ -95,7 +92,7 @@
 
 
 
-            <div class="pt-8 pb-16">
+            <div class="pt-2 pb-16">
                 <div class="flex justify-end">
                     <button
                         type="button"
@@ -119,12 +116,14 @@
                         "
                         @click="recoverAccount"
                     >
-                        Send activation
+                        <LockOpenIcon
+                            class="-ml-1 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                        />
+                        Send
                     </button>
                 </div>
             </div>
-
-
 
         </div>
 
@@ -136,22 +135,21 @@ import { ref } from 'vue';
 import { useRoute } from 'vue-router'
 import axios from 'axios';
 import MainMenu from './MainMenu.vue';
+import PageTitle from './PageTitle.vue';
 import { notify } from 'notiwind';
+import useRecovery from '../composables/use-recovery';
 
 import {
-    ArrowSmDownIcon,
-    ArrowSmUpIcon,
-    PaperClipIcon,
     KeyIcon,
+    LockOpenIcon,
 } from '@heroicons/vue/solid';
 
 export default {
     components: {
         MainMenu,
-        ArrowSmDownIcon,
-        ArrowSmUpIcon,
-        PaperClipIcon,
+        PageTitle,
         KeyIcon,
+        LockOpenIcon,
     },
 
     setup() {

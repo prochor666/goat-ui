@@ -36,7 +36,7 @@ const mainMenu = function () {
         { name: 'Logout', href: 'logout', match: ['logout'] },
     ];
     const sideNavigationNotLogged = [
-        { name: 'Recover', href: 'recover', match: ['recover'] },
+        { name: 'Recover (lost password)', href: 'recover', match: ['recover'] },
         { name: 'Login', href: 'login', match: ['login'] },
     ];
 
