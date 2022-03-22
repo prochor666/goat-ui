@@ -74,8 +74,8 @@
                 <li v-for="user in Pagination.options.result" :key="user.id">
                     <router-link
                         :to="{
-                            name: 'user-detail',
-                            params: { userid: user.id }
+                            name: user.id !== activeUser.id ? 'user-detail': 'profile',
+                            params: user.id !== activeUser.id ?  { userid: user.id }: {},
                         }"
                         class="group block hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
@@ -107,6 +107,15 @@
                                             "
                                         >
                                             {{ user.username }}
+
+
+                                            <span
+                                                class="text-amber-200 bg-emerald-500 dark:bg-emerald-700 inline-flex items-baseline px-2.5 py-0.5 rounded text-xs font-medium ml-2 md:mt-2 lg:mt-0"
+                                                v-if="user.id === activeUser.id"
+                                            >
+                                                You
+                                            </span>
+
                                         </p>
                                         <p
                                             class="
@@ -230,6 +239,7 @@ export default {
         const router = useRouter();
         const apiUrl = route.meta.apiUrl;
         const Pagination = usePaginator();
+        const activeUser = route.meta.user.profile;
 
         Pagination.options.page = parseInt(route.query.page) || 1;
         Pagination.options.to = 'users';
@@ -263,6 +273,7 @@ export default {
             router,
             roles,
             Pagination,
+            activeUser,
             breadCrumbs,
         };
     },

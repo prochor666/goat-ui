@@ -553,6 +553,8 @@ export default {
         const id = parseInt(route.params.userid || 0);
         const pageTitle = id === 0 ? 'New user' : 'Edit user';
 
+        const activeUser = route.meta.user.profile;
+
         const saving = ref({
             status: false,
             result: {
@@ -588,10 +590,12 @@ export default {
 
         console.log('User', user, 'Roles', roles.roles);
 
-        const test = ref(false);
+        if (activeUser.id === user.id) {
+
+            router.push('/profile');
+        }
 
         return {
-            test,
             roles,
             user: user,
             router,
