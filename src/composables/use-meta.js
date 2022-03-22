@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import axios from 'axios';
 import { notify } from 'notiwind';
+import utils from '../composables/utils';
 
 let meta = reactive(new Set());
 let metas = reactive(new Set());
@@ -10,11 +11,6 @@ let saving = reactive({
 });
 
 export const useMeta = function () {
-
-    let sleep = function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
 
     let save = async function (saving, meta, router) {
 
@@ -49,7 +45,7 @@ export const useMeta = function () {
             console.log('Nav data', modMeta, requestMethod);
 
             saving.status = true;
-            let x = await sleep(400);
+            let x = await utils().sleep(400);
 
             const result = await axios[requestMethod](`${apiUrl}/api/${requestPath}`, modMeta, {
                 headers: {

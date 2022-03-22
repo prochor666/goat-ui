@@ -1,20 +1,17 @@
 import { reactive } from 'vue';
 import axios from 'axios';
 import { notify } from 'notiwind';
+import utils from '../composables/utils';
 
 let userSettings = reactive(new Set());
 let saving = reactive(new Set());
 
 export const useSettings = function () {
 
-    let sleep = function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
     let save = async function (saving, userSettings) {
         try {
             saving.status = true;
-            let x = await sleep(500);
+            let x = await utils().sleep(500);
 
             const apiUrl = localStorage.getItem("apiUrl") || '';
             const modSettings = JSON.parse(JSON.stringify(userSettings));

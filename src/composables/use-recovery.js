@@ -1,12 +1,15 @@
 import axios from 'axios';
 
-export const useRecovery = async () => {
+export const useRecovery = function() {
 
+    const recover = async function (saving, userStr) {
+        saving.status = true;
 
-    const recover = async function (apiUrl, userStr) {
         const account = {
 
         };
+
+        const apiUrl = localStorage.getItem('apiUrl') || '';
 
         const session_id = localStorage.getItem('session_id');
         const data = {
@@ -30,9 +33,12 @@ export const useRecovery = async () => {
 
                     //console.log('Auto login', auth.data.user);
                 }
+
+                saving.status = false;
             }
         } catch (e) {
 
+            saving.status = false;
             console.log('Login error', e);
         }
     };

@@ -1,6 +1,7 @@
 import { defineCustomElement, reactive } from 'vue';
 import axios from 'axios';
 import { notify } from 'notiwind';
+import utils from '../composables/utils';
 
 let post = reactive(new Set());
 const saving = reactive({
@@ -8,11 +9,6 @@ const saving = reactive({
 });
 
 export const usePosts = function () {
-
-    const sleep = function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
-
 
     const save = async function (saving, post, router) {
 
@@ -44,7 +40,7 @@ export const usePosts = function () {
             console.log('Nav data', modPost, requestMethod);
 
             saving.status = true;
-            let x = await sleep(400);
+            let x = await utils().sleep(400);
 
             const result = await axios[requestMethod](`${apiUrl}/api/${requestPath}`, modPost, {
                 headers: {

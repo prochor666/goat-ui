@@ -16,6 +16,7 @@ export const useUsers = function () {
             const session_id = localStorage.getItem('session_id');
             const apiUrl = localStorage.getItem("apiUrl") || '';
             let modUser = { ...user };
+            saving.status = true;
 
             console.log('User data', modUser);
 
@@ -38,7 +39,6 @@ export const useUsers = function () {
                 searchKey = 'created';
             }
 
-            saving.status = true;
             let x = await utils().sleep(400);
 
             if (requestMethod === 'patch') {
