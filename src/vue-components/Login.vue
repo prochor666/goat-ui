@@ -55,7 +55,6 @@
                             flex
                             items-center
                         "
-                        @click="loginUser"
                     >
                         <UserIcon
                             class="h-5 w-5"
@@ -90,7 +89,7 @@
                         type="text"
                         name="ulc"
                         v-model="login"
-                        @keyup.enter="loginUser"
+                        @keyup.enter="useLogin.login(saving, login, password, router)"
                     />
                 </div>
             </div>
@@ -121,7 +120,6 @@
                             flex
                             items-center
                         "
-                        @click="loginUser"
                     >
                         <KeyIcon
                             class="h-5 w-5"
@@ -155,8 +153,8 @@
                         type="password"
                         name="password"
                         autocomplete="off"
-                        v-model.number="password"
-                        @keyup.enter="loginUser"
+                        v-model="password"
+                        @keyup.enter="useLogin.login(saving, login, password, router)"
                     />
                 </div>
             </div>
@@ -180,16 +178,29 @@
                             font-medium
                             rounded-md
                             text-white
-                            bg-sky-600
-                            hover:bg-sky-700
+                            bg-amber-600
+                            hover:bg-amber-700
                             focus:outline-none
                             focus:ring-2
-                            focus:ring-sky-500
+                            focus:ring-amber-500
                         "
-                        @click="loginUser"
+                        @click="router.push('/recover')"
                     >
-                        <LockOpenIcon
+                        Recover password
+                    </button>
+
+                    <button
+                        type="button"
+                        :class="[saving.status === true || login.length <1 || password.length < 1 ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
+                        :disabled="saving.status === true || login.length < 1 || password.length < 1"
+                        @click="useLogin.login(saving, login, password, router)"
+                    >
+                        <LockOpenIcon v-if="!saving.status"
                             class="-ml-1 mr-2 h-5 w-5"
+                            aria-hidden="true"
+                        />
+                        <RefreshIcon v-if="saving.status"
+                            class="animate-spin mr-2 h-5 w-5 text-white"
                             aria-hidden="true"
                         />
                         Authorize
@@ -210,6 +221,7 @@ import axios from 'axios';
 import MainMenu from './MainMenu.vue';
 import PageTitle from './PageTitle.vue';
 import { notify } from 'notiwind';
+import useLogin from '../composables/use-login';
 
 import {
     KeyIcon,
@@ -217,12 +229,17 @@ import {
     UserIcon,
 } from '@heroicons/vue/solid';
 
+import {
+    RefreshIcon,
+} from '@heroicons/vue/outline';
+
 export default {
     components: {
         MainMenu,
         PageTitle,
         KeyIcon,
         LockOpenIcon,
+        RefreshIcon,
         UserIcon,
     },
     setup() {
@@ -233,38 +250,15 @@ export default {
         const login = ref('');
         const password = ref('');
 
-        const loginUser = async () => {
-
-            const apiUrl = localStorage.getItem('apiUrl') || '';
-
-            const res = await axios.post(
-                `${apiUrl}/api/login`, {
-                    login: login.value,
-                    password: password.value,
-                }, {
-
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            const auth = await res.data;
-
-            console.log('Login info', auth);
-
-            if (typeof (auth) === 'object' && auth.data.user.id && auth.data.user.id > 0) {
-
-                localStorage.setItem('session_id', auth.data.ssid);
-                router.push('/');
-            } else {
-
-                notify({
-                    group: "error",
-                    title: "Error",
-                    text: "Can not login, check your username and password",
-                }, 5000);
-            }
-        };
+        const saving = ref({
+            status: false,
+            result: {
+                required: {
+                    username: true,
+                    password: true,
+                }
+            },
+        })
 
         if (route.meta.user.logged === true) {
 
@@ -273,10 +267,11 @@ export default {
         }
 
         return {
-            loginUser,
             login,
+            saving,
             password,
             router,
+            useLogin: useLogin(),
         };
     },
 };

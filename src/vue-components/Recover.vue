@@ -96,8 +96,8 @@
                 <div class="flex justify-end">
                     <button
                         type="button"
-                        :class="[saving.status === true ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
-                        :disabled="saving.status === true"
+                        :class="[saving.status === true || userStr.length < 1 ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
+                        :disabled="saving.status === true || userStr.length < 1"
                         @click="useRecovery.recover(saving, userStr)"
                     >
                         <LockOpenIcon v-if="!saving.status"
@@ -119,7 +119,7 @@
 
 <script>
 import { ref } from 'vue';
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 import MainMenu from './MainMenu.vue';
 import PageTitle from './PageTitle.vue';
@@ -130,6 +130,7 @@ import {
     KeyIcon,
     LockOpenIcon,
 } from '@heroicons/vue/solid';
+
 import {
     RefreshIcon,
 } from '@heroicons/vue/outline';
