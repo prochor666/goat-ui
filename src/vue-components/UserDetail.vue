@@ -519,6 +519,7 @@ import {
     ChevronRightIcon,
     LocationMarkerIcon,
 } from '@heroicons/vue/solid';
+
 import {
     RefreshIcon,
 } from '@heroicons/vue/outline';
