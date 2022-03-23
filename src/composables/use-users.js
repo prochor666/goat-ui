@@ -67,6 +67,14 @@ export const useUsers = function () {
             if (state.data.input) {
 
                 saving.result.required = serverResponse().parse(state.data.input);
+            } else {
+
+                saving.result.required = {
+                    username: true,
+                    email: true,
+                    password: true,
+                    role: true,
+                };
             }
 
             notify({
