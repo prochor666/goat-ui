@@ -132,16 +132,16 @@
                         <div class="text-gray-900 dark:text-gray-400">
 
                             <img class="w-full"
-                                :src="`${apiUrl}${file.variants.md}`"
+                                :src="`${apiUrl}/${file.variants.md}`"
                                 v-if="file.variants.md !== false">
 
                             <img class="w-full"
-                                :src="`${apiUrl}${file.variants.lg}`"
+                                :src="`${apiUrl}/${file.variants.lg}`"
                                 v-if="file.variants.md === false && file.variants.lg !== false">
 
                             <img class="w-full"
                                 v-if="file.variants.md === false && file.variants.lg === false"
-                                :src="`${apiUrl}${file.http}`">
+                                :src="`${apiUrl}/${file.http}`">
                         </div>
                     </div>
                     <div class="block w-full grid grid-cols-1 sm-grid-cols-2 gap-2" v-if="switchView(file.mime) == 'video'">

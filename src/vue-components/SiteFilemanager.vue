@@ -219,7 +219,7 @@
                         @click="fileAction(item)"
                     >
                         <img class="h-14 mx-auto text-gray-400 dark:text-gray-500 col-span-2 self-start brightness-75 group-hover:brightness-125"
-                            :src="`${apiUrl}${item.variants.ico}`"
+                            :src="`${apiUrl}/${item.variants.ico}`"
                             v-if="item.variants.ico !== false">
 
                         <DocumentTextIcon
@@ -958,6 +958,9 @@ export default {
 
         // let directoryModel = await loadDirs('');
         // console.log(directoryModel);
+
+
+        console.log(useFiles().dirList.files);
 
         const fsRoot = [
             {
