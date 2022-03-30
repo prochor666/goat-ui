@@ -1,8 +1,6 @@
 <template>
     <li>
-        <div
-            class="text-sm my-1"
-        >
+        <div class="text-sm my-1">
             <span
                 class="font-bold cursor-pointer w-4 inline-block text-center"
                 @click="toggle">

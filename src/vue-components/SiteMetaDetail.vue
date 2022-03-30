@@ -301,6 +301,9 @@
                                 Settings
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
+
+                                <SiteMetaTypes />
+
                                 <textarea
                                     id="settings"
                                     name="settings"
@@ -389,6 +392,7 @@ import { useRoute, useRouter } from 'vue-router';
 import MainMenu from './MainMenu.vue';
 import PageTitle from './PageTitle.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
+import SiteMetaTypes from './SiteMetaTypes.vue';
 import useMeta from '../composables/use-meta';
 import useSites from '../composables/use-sites';
 
@@ -420,6 +424,7 @@ export default {
         MainMenu,
         PageTitle,
         Breadcrumbs,
+        SiteMetaTypes,
         Menu,
         MenuButton,
         MenuItem,
