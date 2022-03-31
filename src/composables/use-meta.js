@@ -134,27 +134,30 @@ export const useMeta = function () {
     };
 
 
-    let load = async function (id, domains_id) {
+    let load = async function (id, domains_id, langs) {
 
         let meta = {
             id: 0,
             tag: '',
             order: 0,
             type: 'text',
-            settings: {
-                lang: [{
-                    name: 'en',
-                    longName: 'English',
-                    defaults: [{
-                        value: '',
-                        title: ''
-                    }],
-                    data: []
-                }],
-            },
+            options: {},
             domains_id: domains_id,
             public: false,
         };
+
+        for (let i in langs) {
+
+            meta.options[langs[i].alpha2] = {
+                name: '',
+                lang: langs[i].name,
+                defaults: [{
+                    value: '',
+                    title: ''
+                }],
+                data: [],
+            }
+        }
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
 

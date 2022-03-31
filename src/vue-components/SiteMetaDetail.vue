@@ -116,55 +116,6 @@
                                     sm:pt-2
                                 "
                             >
-                                Name
-                            </label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input
-                                    id="name"
-                                    name="name"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Enter meta name"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    "
-                                    v-model="meta.name"
-                                />
-                            </div>
-                        </div>
-
-                        <div
-                            class="
-                                sm:grid sm:grid-cols-3
-                                sm:gap-4
-                                sm:items-start
-                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
-                                sm:pt-5
-                            "
-                        >
-                            <label
-                                for="name"
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
-                                    dark:text-gray-400
-                                    sm:mt-px
-                                    sm:pt-2
-                                "
-                            >
                                 Tag
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -194,30 +145,6 @@
                             </div>
                         </div>
 
-
-                    </div>
-
-                </div>
-
-                <div class="space-y-8 sm:space-y-5">
-                    <div>
-                        <h3
-                            class="
-                                text-lg
-                                leading-6
-                                font-medium
-                                text-gray-900
-                                dark:text-gray-400
-                            "
-                        >
-                            Settings
-                        </h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                            Meta tag type and settings.
-                        </p>
-                    </div>
-
-                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
 
                         <div
                             class="
@@ -255,7 +182,6 @@
                                         id="meta_type"
                                         name="meta_type"
                                         class="
-                                            max-w-lg
                                             block
                                             focus:ring-sky-500
                                             focus:border-sky-500
@@ -277,57 +203,34 @@
                             </div>
                         </div>
 
-                        <div
+
+
+                    </div>
+
+                </div>
+
+                <div class="space-y-8 sm:space-y-5">
+                    <div>
+                        <h3
                             class="
-                                sm:grid sm:grid-cols-3
-                                sm:gap-4
-                                sm:items-start
-                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
-                                sm:pt-5
+                                text-lg
+                                leading-6
+                                font-medium
+                                text-gray-900
+                                dark:text-gray-400
+                                pt-4
                             "
                         >
-                            <label
-                                for="settings"
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
-                                    dark:text-gray-400
-                                    sm:mt-px
-                                    sm:pt-2
-                                "
-                            >
-                                Settings
-                            </label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            Settings
+                        </h3>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                            Meta tag type-specific settings.
+                        </p>
+                    </div>
 
-                                <SiteMetaTypes />
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-400 rounded-md py-2 px-4">
 
-                                <textarea
-                                    id="settings"
-                                    name="settings"
-                                    placeholder="Enter page SEO description"
-                                    rows="5"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    "
-                                    v-model="meta.settings"
-                                />
-                            </div>
-                        </div>
-
+                        <SiteMetaTypes :langs="site.langs" :meta="meta" />
 
                     </div>
 
@@ -471,15 +374,18 @@ export default {
             router.push('sites');
         }
 
-        const meta = await useMeta().load(id, site.id);
+        const meta = await useMeta().load(id, site.id, site.langs);
 
         const metaTypes = [
             'checkbox',
             'text',
+            'blob',
             'file',
             'files',
             'color',
             'radio',
+            'select',
+            'bool',
         ].sort();
 
 
