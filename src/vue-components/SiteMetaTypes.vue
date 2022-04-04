@@ -37,6 +37,10 @@
 
             <div class="mt-1">
 
+                <div class="block" v-if="['text'].includes(meta.type)">
+                    <span class="text-md">Text options</span>
+                </div>
+
                 <div class="block" v-if="['radio', 'select'].includes(meta.type)">
                     <span class="text-md">Radio & select options</span>
                 </div>
