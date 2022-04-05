@@ -196,6 +196,7 @@
                                             dark:border-gray-700
                                         "
                                         v-model="meta.type"
+                                        @change="useMeta.reset(meta, site.langs, '')"
                                     >
                                         <option v-for="type in metaTypes" :key="type" :value="type">{{ type }}</option>
                                     </select>

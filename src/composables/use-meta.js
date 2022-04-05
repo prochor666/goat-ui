@@ -134,7 +134,36 @@ export const useMeta = function () {
     };
 
 
-    let load = async function (id, domains_id, langs) {
+    const reset = function (meta, langs, default_value = '') {
+
+        meta.options = [];
+
+        if (meta.type === 'color') {
+
+            default_value = 'rgba(0,0,0,1)';
+        }
+
+
+        for (let i in langs) {
+
+            meta.options.push({
+                name: '',
+                alpha2: langs[i].alpha2,
+                lang: langs[i].name,
+                defaults: [{
+                    value: default_value,
+                    title: '',
+                    default: true,
+                }],
+                data: [],
+            });
+        }
+
+        return meta;
+    };
+
+
+    const load = async function (id, domains_id, langs) {
 
         let meta = {
             id: 0,
@@ -188,6 +217,7 @@ export const useMeta = function () {
         saving,
         save,
         load,
+        reset,
         patchMetaOrder,
     }
 }

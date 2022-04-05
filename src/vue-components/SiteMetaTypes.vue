@@ -83,7 +83,7 @@
                                     dark:bg-gray-900
                                     dark:border-gray-700
                                 "
-                                v-if="['text'].includes(meta.type)"
+                                v-if="['text', 'color'].includes(meta.type)"
                                 v-model="meta.options[0].defaults[0].value"
                             />
 
@@ -120,7 +120,7 @@
 
 
                 <div class="block" v-if="['radio', 'select'].includes(meta.type)">
-
+                    <span class="text-md">Radio and select options</span>
                 </div>
 
                 <div class="block" v-if="['checkbox'].includes(meta.type)">
@@ -220,9 +220,8 @@ export default{
         const apiUrl = route.meta.apiUrl;
         const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false
 
-
         const colorPicker = {
-            color: '#59c7f9',
+            color: '#000000',
             suckerCanvas: null,
             suckerArea: [],
             isSucking: false,
