@@ -141,22 +141,26 @@ export const useMeta = function () {
             tag: '',
             order: 0,
             type: 'text',
-            options: {},
+            validate_as: 'text',
+            required: false,
+            options: [],
             domains_id: domains_id,
             public: false,
         };
 
         for (let i in langs) {
 
-            meta.options[langs[i].alpha2] = {
+            meta.options.push({
                 name: '',
+                alpha2: langs[i].alpha2,
                 lang: langs[i].name,
                 defaults: [{
                     value: '',
-                    title: ''
+                    title: '',
+                    default: true,
                 }],
                 data: [],
-            }
+            });
         }
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
@@ -174,8 +178,6 @@ export const useMeta = function () {
             meta = data;
             meta.public = meta.public == 1 ? true : false;
         }
-
-        meta.settings = JSON.stringify(meta.settings, null, 4);
 
         return meta;
     };

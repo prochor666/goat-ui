@@ -89,7 +89,7 @@
                             General
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                            General information about the meta.
+                            General information about the meta item.
                         </p>
                     </div>
 
@@ -230,7 +230,7 @@
 
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-400 rounded-md py-2 px-4">
 
-                        <SiteMetaTypes :langs="site.langs" :meta="meta" />
+                        <SiteMetaTypes :meta="meta" />
 
                     </div>
 
