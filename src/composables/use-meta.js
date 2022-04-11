@@ -3,8 +3,6 @@ import axios from 'axios';
 import { notify } from 'notiwind';
 import utils from '../composables/utils';
 
-let meta = reactive(new Set());
-let metas = reactive(new Set());
 let saving = reactive({
     status: false,
     result: {},
@@ -134,30 +132,54 @@ export const useMeta = function () {
     };
 
 
+    const addDefaultValue = function (meta, langs, default_value = '') {
+
+        let valueNames = {};
+
+        for (let i in langs) {
+
+            valueNames[langs[i].alpha2] = '';
+        }
+
+        meta.default.values.push({
+            value: default_value,
+            names: valueNames,
+        });
+
+
+        console.log('addLangValue', meta.default);
+
+        return meta;
+    };
+
+
+    const createDefault = function (meta, langs, default_value = '') {
+
+        for (let i in langs) {
+
+            console.log('add title', meta.default);
+            meta.default.titles[langs[i].alpha2] = '';
+        }
+
+        meta = addDefaultValue(meta, langs, default_value);
+
+        return meta;
+    };
+
+
     const reset = function (meta, langs, default_value = '') {
 
-        meta.options = [];
+        meta.default = {
+            titles: {},
+            values: [],
+        };
 
         if (meta.type === 'color') {
 
             default_value = 'rgba(0,0,0,1)';
         }
 
-
-        for (let i in langs) {
-
-            meta.options.push({
-                name: '',
-                alpha2: langs[i].alpha2,
-                lang: langs[i].name,
-                defaults: [{
-                    value: default_value,
-                    title: '',
-                    default: true,
-                }],
-                data: [],
-            });
-        }
+        meta = createDefault(meta, langs, default_value);
 
         return meta;
     };
@@ -172,25 +194,15 @@ export const useMeta = function () {
             type: 'text',
             validate_as: 'text',
             required: false,
-            options: [],
+            default: {
+                titles: {},
+                values: [],
+            },
             domains_id: domains_id,
             public: false,
         };
 
-        for (let i in langs) {
-
-            meta.options.push({
-                name: '',
-                alpha2: langs[i].alpha2,
-                lang: langs[i].name,
-                defaults: [{
-                    value: '',
-                    title: '',
-                    default: true,
-                }],
-                data: [],
-            });
-        }
+        meta = createDefault(meta, langs, '');
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
 
@@ -208,16 +220,19 @@ export const useMeta = function () {
             meta.public = meta.public == 1 ? true : false;
         }
 
+        meta = reactive(meta);
+
         return meta;
     };
 
 
     return {
-        meta,
         saving,
         save,
         load,
         reset,
+        createDefault,
+        addDefaultValue,
         patchMetaOrder,
     }
 }

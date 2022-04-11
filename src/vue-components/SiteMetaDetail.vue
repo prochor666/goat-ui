@@ -198,7 +198,7 @@
                                         v-model="meta.type"
                                         @change="useMeta.reset(meta, site.langs, '')"
                                     >
-                                        <option v-for="type in metaTypes" :key="type" :value="type">{{ type }}</option>
+                                        <option v-for="defaultValue, type in metaTypes" :key="type" :value="type">{{ type }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@
 
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-400 rounded-md py-2 px-4">
 
-                        <SiteMetaTypes :meta="meta" />
+                        <SiteMetaTypes :meta="meta" :langs="site.langs" />
 
                     </div>
 
@@ -377,17 +377,17 @@ export default {
 
         const meta = await useMeta().load(id, site.id, site.langs);
 
-        const metaTypes = [
-            'checkbox',
-            'text',
-            'blob',
-            'file',
-            'files',
-            'color',
-            'radio',
-            'select',
-            'bool',
-        ].sort();
+        const metaTypes = {
+            text: '',
+            blob: '',
+            color: '',
+            radio: [],
+            select: [],
+            checkbox: [],
+            bool: [],
+            file: false,
+            files: false,
+        };
 
 
         const breadCrumbs = [{
@@ -415,7 +415,7 @@ export default {
 
         return {
             site,
-            meta: ref(meta),
+            meta,
             metaTypes,
             domains_id,
             router,
