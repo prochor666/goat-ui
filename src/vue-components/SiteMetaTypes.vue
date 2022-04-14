@@ -5,11 +5,11 @@
         <div
             class="sm:grid sm:grid-cols-2 sm:gap-4"
         >
-            <div class="py-1">
+            <div class="py-2">
 
-                <div v-for="title, lang in meta.default.titles" :key="`opt-${lang}`" class="py-3">
+                <div v-for="title, lang in meta.default.titles" :key="`opt-${lang}`" class="px-2 py-2">
 
-                    <label class="inline-block mb-2 text-sm font-medium" :for="`name-${lang}`">
+                    <label class="inline-block mb-2 text-sm font-medium select-none" :for="`name-${lang}`">
                         Title ({{ lang }})
                     </label>
 
@@ -39,18 +39,17 @@
                 </div>
             </div>
 
-            <div class="mt-1">
+            <div class="py-2">
 
-                <div class="block" v-if="['blob', 'text', 'file', 'files', 'color'].includes(meta.type)">
+                <div class="block px-2 py-2" v-if="['blob', 'text', 'file', 'files', 'color'].includes(meta.type)">
 
                     <div
                         class="
-                            sm:border-t sm:border-gray-200 sm:dark:border-gray-900
-                            sm:pt-5
+                            block
                         "
                     >
                         <label
-                            :for="`default-value`"
+                            :for="`default-${meta.type}-value`"
                             class="
                                 block
                                 text-sm
@@ -116,9 +115,9 @@
 
                 </div>
 
-                <div class="block py-3" v-if="['radio', 'select', 'checkbox'].includes(meta.type)">
+                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['radio', 'select', 'checkbox'].includes(meta.type)">
 
-                    <div class="py-3">
+                    <div class="block border-0 px-2 py-2 mb-2">
 
                         <button
                             type="button"
@@ -159,39 +158,87 @@
                     <div
                         v-for="value, index in meta.default.values"
                         :key="index"
+                        class="block px-2 py-2"
                     >
 
-                        <div class="my-2">
-                            <input
-                                :id="`default-${index}`"
-                                name="option-value"
-                                type="text"
-                                autocomplete="off"
-                                :placeholder="`Enter option value`"
+                        <div class="my-2 sm:grid sm:grid-cols-2 sm:gap-4">
+                            <label
+                                :for="`default-${index}`"
                                 class="
                                     block
-                                    max-w-lg
-                                    w-full
-                                    shadow-sm
-                                    focus:ring-sky-500
-                                    focus:border-sky-500
-                                    sm:text-sm
-                                    border-gray-300
-                                    rounded-md
+                                    text-sm
+                                    font-medium
+                                    text-gray-700
                                     dark:text-gray-400
-                                    dark:bg-gray-900
-                                    dark:border-gray-700
+                                    mb-2
+                                    select-none
                                 "
-                                v-model="meta.default.values[index].value"
-                            />
-                        </div>
+                            >
+                                Option ({{ index }}) value
+                            </label>
 
+                            <div class="flex border p-0 border-gray-300 dark:border-gray-700 rounded-md shadow-sm group hover:ring-2 hover:ring-offset-gray-50 hover:ring-sky-500 dark:hover:ring-sky-700">
+
+                                <div class="flex-1">
+                                    <input
+                                        :id="`default-${index}`"
+                                        name="option-value"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Enter option value"
+                                        class="
+                                            w-full
+                                            sm:text-sm
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            border-0
+                                            focus:ring-sky-500
+                                            focus:border-sky-500
+                                            rounded-l-md
+                                        "
+                                        v-model="meta.default.values[index].value"
+                                    />
+                                </div>
+
+                                <div class="flex-none">
+                                    <button
+                                        type="button"
+                                        class="
+                                            inline-flex
+                                            items-center
+                                            px-4
+                                            py-2
+                                            rounded-r-md
+                                            text-sm
+                                            font-medium
+                                            focus:outline-none
+                                            focus:ring-0
+                                            focus:ring-offset-gray-50
+                                            focus:ring-red-500
+                                            text-white"
+
+                                        :class="index === 0 ? 'cursor-not-allowed text-gray-300 dark:text-gray-700 bg-white dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-800': 'bg-red-600 hover:bg-red-700 text-white'"
+                                        :disabled="index === 0"
+                                        @click="useMeta.removedDefaultValue(meta, index)"
+                                        >
+                                        <TrashIcon
+                                            class="-ml-1 mr-2 h-5 w-5"
+                                            aria-hidden="true"
+                                        />
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
 
 
                         <div
                             class="
                                 sm:border-t sm:border-gray-200 sm:dark:border-gray-900
-                                sm:py-3 sm:grid sm:grid-cols-2 sm:gap-4
+                                sm:grid sm:grid-cols-2 sm:gap-4
+                                py-2
                             "
                             v-for="name, nameKey in meta.default.values[index].names"
                             :key="nameKey"
@@ -205,6 +252,7 @@
                                     text-gray-700
                                     dark:text-gray-400
                                     mb-2
+                                    select-none
                                 "
                             >
                                 Option name ({{ nameKey }})
@@ -241,7 +289,7 @@
                 </div>
 
 
-                <div class="block" v-if="['bool'].includes(meta.type)">
+                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['bool'].includes(meta.type)">
                     <span class="text-md">Bool options</span>
                 </div>
 
@@ -267,6 +315,7 @@ import 'vue-color-kit/dist/vue-color-kit.css';
 
 import {
     PlusCircleIcon,
+    TrashIcon,
     XIcon,
 } from '@heroicons/vue/outline';
 
@@ -286,6 +335,7 @@ export default{
     components: {
         ColorPicker,
         PlusCircleIcon,
+        TrashIcon,
         XIcon,
     },
 

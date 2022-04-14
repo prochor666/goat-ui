@@ -19,6 +19,11 @@
 
                 <PageTitle title="Dashboard" />
 
+
+                <div class="block">
+
+                </div>
+
             </div>
         </div>
     </header>
@@ -32,10 +37,6 @@
 <script>
 import { ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import MainMenu from './MainMenu.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
 import PageTitle from './PageTitle.vue';
@@ -63,6 +64,11 @@ export default {
         const pwd = localStorage.getItem("pwd") || '';
 
         const breadCrumbs = [];
+
+        const log = function(a) {
+            console.log(a);
+        };
+
 
         return {
             logged,

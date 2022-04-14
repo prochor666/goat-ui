@@ -105,7 +105,7 @@
                             "
                         >
                             <label
-                                for="name"
+                                for="tag"
                                 class="
                                     block
                                     text-sm
@@ -120,11 +120,11 @@
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <input
-                                    id="name"
-                                    name="name"
+                                    id="tag"
+                                    name="tag"
                                     type="text"
                                     autocomplete="off"
-                                    placeholder="Enter meta name"
+                                    placeholder="Enter meta tag name"
                                     class="
                                         block
                                         max-w-lg
@@ -229,7 +229,7 @@
                         </p>
                     </div>
 
-                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-400 rounded-md py-2 px-4">
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-400 rounded-md py-2 px-4">
 
                         <SiteMetaTypes :meta="meta" :langs="site.langs" />
 

@@ -125,12 +125,14 @@ export const usePages = function () {
                 for (let i in structNavs[nav].pages) {
 
                     let patchPage = {
+                        name: structNavs[nav].pages[i].name,
+                        slug: structNavs[nav].pages[i].slug,
                         navs_id: parseInt(structNavs[nav].id),
+                        domains_id: parseInt(structNavs[nav].pages[i].domains_id),
                         order: parseInt(i),
                     }
-                    //console.log('Patch page data', patchPage);
-
                     let patchID = structNavs[nav].pages[i].id;
+                    console.log('Patch page data', patchID, patchPage);
                     const result = await axios.patch(`${apiUrl}/api/pages/${patchID}`, patchPage, {
                         headers: {
                             Authorization: localStorage.getItem('session_id'),
@@ -146,7 +148,7 @@ export const usePages = function () {
 
         //let x = await utils().sleep(4000);
         saving.status = false;
-        //console.log('Site patch summary', summary);
+        console.log('Site patch summary', summary);
 
         return summary;
     };

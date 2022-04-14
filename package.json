@@ -17,14 +17,14 @@
         "notiwind": "^1.2.5",
         "object-hash": "^2.2.0",
         "qs": "^6.10.3",
-        "vue": "^3.2.31",
+        "vue": "^3.2.32",
+        "vue-color-kit": "^1.0.5",
         "vue-material-design-icons": "^5.0.0",
         "vue-router": "^4.0.14",
         "vue3-code-mirror": "^1.0.6",
         "vue3-datepicker": "^0.3.2",
         "vue3-highlightjs": "^1.0.5",
-        "vuedraggable": "^4.1.0",
-        "vue-color-kit": "^1.0.5"
+        "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
         "@headlessui/vue": "^1.5.0",

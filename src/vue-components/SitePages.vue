@@ -92,7 +92,7 @@
                             ghost-class="ghost"
                             animation="200"
                             group="pages"
-                            tag="transition-group"
+                            tag="div"
                             handle=".handle"
                             @start="drag = true"
                             @end="drag = false; usePages.patchSiteOrder(usePages.saving, structNavs)"

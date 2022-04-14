@@ -132,6 +132,16 @@ export const useMeta = function () {
     };
 
 
+    const removedDefaultValue = function (meta, removeIndex) {
+
+        meta.default.values = meta.default.values.filter(function (value, index, arr) {
+            return removeIndex != index;
+        });
+
+        return meta;
+    };
+
+
     const addDefaultValue = function (meta, langs, default_value = '') {
 
         let valueNames = {};
@@ -233,6 +243,7 @@ export const useMeta = function () {
         reset,
         createDefault,
         addDefaultValue,
+        removedDefaultValue,
         patchMetaOrder,
     }
 }
