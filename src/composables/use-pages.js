@@ -25,7 +25,7 @@ export const usePages = function () {
 
             modPage.public = modPage.public ? 1 : 0;
             modPage.visible = modPage.visible ? 1 : 0;
-            modPage.domains_id = parseInt(modPage.domains_id);
+            //modPage.domains_id = parseInt(modPage.domains_id);
             modPage.navs_id = parseInt(modPage.navs_id);
             modPage.order = parseInt(modPage.order);
             modPage.posts_page_count = parseInt(modPage.posts_page_count);
@@ -116,9 +116,13 @@ export const usePages = function () {
         saving.status = true;
         const apiUrl = localStorage.getItem("apiUrl") || '';
         let summary = [];
+        let orderData = {
+            domains_id: 0,
+        };
+
         for (let nav in structNavs) {
 
-            //console.log('Nav', structNavs[nav].name);
+            console.log('Nav', structNavs[nav].pages);
 
             if (structNavs[nav].pages.length > 0) {
 
@@ -186,7 +190,7 @@ export const usePages = function () {
     };
 
 
-    const load = async function (id, domains_id) {
+    const load = async function (id, navs_id) {
 
         let page = {
             id: 0,
@@ -205,7 +209,7 @@ export const usePages = function () {
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
 
-        const r = await axios.get(`${apiUrl}/api/pages/${id}/?_wfilter[]=domains_id|${domains_id}`, {
+        const r = await axios.get(`${apiUrl}/api/pages/${id}/?_wfilter[]=navs_id|${navs_id}`, {
             headers: {
                 Authorization: localStorage.getItem('session_id'),
                 'Content-Type': 'application/json'

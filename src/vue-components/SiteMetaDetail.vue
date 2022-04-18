@@ -84,11 +84,12 @@
                                 font-medium
                                 text-gray-900
                                 dark:text-gray-400
+                                select-none
                             "
                         >
                             General
                         </h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500 select-none">
                             General information about the meta item.
                         </p>
                     </div>
@@ -114,6 +115,7 @@
                                     dark:text-gray-400
                                     sm:mt-px
                                     sm:pt-2
+                                    select-none
                                 "
                             >
                                 Tag
@@ -165,6 +167,7 @@
                                     dark:text-gray-400
                                     sm:mt-px
                                     sm:pt-2
+                                    select-none
                                 "
                             >
                                 Meta type
@@ -220,11 +223,12 @@
                                 text-gray-900
                                 dark:text-gray-400
                                 pt-4
+                                select-none
                             "
                         >
                             Settings
                         </h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500 select-none">
                             Meta tag type-specific settings.
                         </p>
                     </div>

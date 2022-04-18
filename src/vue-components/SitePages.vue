@@ -303,7 +303,7 @@ export default {
         }
 
 
-        const assignPagesToNavs = function(pages, navs)
+        const assignPagesToNavs = function(navs, pages)
         {
             let newNavs = [];
 
@@ -321,7 +321,7 @@ export default {
         };
 
 
-        const navsLoad = async function()
+        const navsLoad = async function(domains_id)
         {
             const r = await axios.get(`${apiUrl}/api/navs/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=name|ASC`, {
                 headers: {
@@ -332,13 +332,20 @@ export default {
             let data = await r.data.data;
             return data;
         };
-        let navs = await navsLoad();
+        let navs = await navsLoad(domains_id);
 
 
-
-        const pagesLoad = async function()
+        const pagesLoad = async function(navs, domains_id)
         {
-            const r = await axios.get(`${apiUrl}/api/pages/?_wfilter[]=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=id|DESC`, {
+            let navsFilter = "&_wop=navs_id|or";
+
+            for (let n in navs) {
+
+                navsFilter += `&_wfilter[]=navs_id|${navs[n].id}`;
+            }
+            console.log(navsFilter);
+
+            const r = await axios.get(`${apiUrl}/api/pages/?_wfilter[]=domains_id|${domains_id}${navsFilter}&_worder[]=order|ASC&_worder[]=id|DESC`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'
@@ -347,10 +354,9 @@ export default {
             let data = await r.data.data;
             return data;
         };
-        const pages = await pagesLoad();
+        const pages = await pagesLoad(navs, domains_id);
 
-        const structNavs = assignPagesToNavs(pages, navs);
-        console.log(structNavs);
+        const structNavs = assignPagesToNavs(navs, pages);
 
         const breadCrumbs = [{
             name: 'Sites',
