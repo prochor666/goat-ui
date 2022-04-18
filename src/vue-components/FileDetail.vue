@@ -32,7 +32,7 @@
 
                         <div class="text-sky-900 dark:text-sky-400 pt-4 px-1 text-sm">
                             <span class="inline-block py-1 px-2 text-center whitespace-nowrap align-baseline font-bold bg-sky-600 text-white rounded mr-2">{{ file.mime }}</span>
-                            <a :href="file.http" target="_blank">Download: {{ file.rel }}</a>
+                            <a :href="`${apiUrl}/${file.http}`" target="_blank">Download: {{ file.rel }}</a>
                         </div>
 
                         <div class="text-sky-900 dark:text-sky-400">
@@ -146,12 +146,12 @@
                     </div>
                     <div class="block w-full grid grid-cols-1 sm-grid-cols-2 gap-2" v-if="switchView(file.mime) == 'video'">
                         <div class="text-gray-900 dark:text-gray-400">
-                            <video class="w-full" :src="`${apiUrl}${file.http}`" preload controls="controls" muted="muted"></video>
+                            <video class="w-full" :src="`${apiUrl}/${file.http}`" preload controls="controls" muted="muted"></video>
                         </div>
                     </div>
                     <div class="block w-full grid grid-cols-1 sm-grid-cols-2 gap-2" v-if="switchView(file.mime) == 'audio'">
                         <div class="text-gray-900 dark:text-gray-400">
-                            <audio class="w-full dark:bg-gray-800" :src="`${apiUrl}${file.http}`" preload controls="controls" volume=".25"></audio>
+                            <audio class="w-full dark:bg-gray-800" :src="`${apiUrl}/${file.http}`" preload controls="controls" volume=".25"></audio>
                         </div>
                     </div>
                 </div>

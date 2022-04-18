@@ -111,48 +111,47 @@ export const usePages = function () {
     };
 
 
-    const patchSiteOrder = async function (saving, structNavs)
+    const patchSiteOrder = async function (saving, domains_id, structNavs)
     {
         saving.status = true;
         const apiUrl = localStorage.getItem("apiUrl") || '';
         let summary = [];
         let orderData = {
-            domains_id: 0,
+            domains_id: domains_id,
+            type: 'pages',
+            collection: [],
         };
 
         for (let nav in structNavs) {
-
-            console.log('Nav', structNavs[nav].pages);
 
             if (structNavs[nav].pages.length > 0) {
 
                 for (let i in structNavs[nav].pages) {
 
-                    let patchPage = {
-                        name: structNavs[nav].pages[i].name,
-                        slug: structNavs[nav].pages[i].slug,
+                    orderData.collection.push({
+                        id: parseInt(structNavs[nav].pages[i].id),
                         navs_id: parseInt(structNavs[nav].id),
-                        domains_id: parseInt(structNavs[nav].pages[i].domains_id),
                         order: parseInt(i),
-                    }
-                    let patchID = structNavs[nav].pages[i].id;
-                    console.log('Patch page data', patchID, patchPage);
-                    const result = await axios.patch(`${apiUrl}/api/pages/${patchID}`, patchPage, {
-                        headers: {
-                            Authorization: localStorage.getItem('session_id'),
-                            'Content-Type': 'application/json'
-                        }
                     });
-
-                    let state = await result.data;
-                    summary.push(state);
                 }
             }
         }
 
+        //console.log('Sending data', orderData);
+
+        const result = await axios.patch(`${apiUrl}/api/order_patch`, orderData, {
+            headers: {
+                Authorization: localStorage.getItem('session_id'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let state = await result.data;
+        summary.push(state);
+
         //let x = await utils().sleep(4000);
         saving.status = false;
-        console.log('Site patch summary', summary);
+        //console.log('Site patch summary', summary);
 
         return summary;
     };
@@ -190,7 +189,7 @@ export const usePages = function () {
     };
 
 
-    const load = async function (id, navs_id) {
+    const load = async function (id, domains_id) {
 
         let page = {
             id: 0,
@@ -209,7 +208,8 @@ export const usePages = function () {
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
 
-        const r = await axios.get(`${apiUrl}/api/pages/${id}/?_wfilter[]=navs_id|${navs_id}`, {
+        const r = await axios.get(`${apiUrl}/api/pages/${id}/?_wfilter[]=domains_id|${domains_id
+}`, {
             headers: {
                 Authorization: localStorage.getItem('session_id'),
                 'Content-Type': 'application/json'

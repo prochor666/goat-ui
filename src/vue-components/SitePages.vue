@@ -95,7 +95,7 @@
                             tag="div"
                             handle=".handle"
                             @start="drag = true"
-                            @end="drag = false; usePages.patchSiteOrder(usePages.saving, structNavs)"
+                            @end="drag = false; usePages.patchSiteOrder(usePages.saving, domains_id, structNavs)"
                             :component-data="{
                                 tag: 'div',
                                 name: !drag ? 'flip-list' : null,
@@ -343,7 +343,6 @@ export default {
 
                 navsFilter += `&_wfilter[]=navs_id|${navs[n].id}`;
             }
-            console.log(navsFilter);
 
             const r = await axios.get(`${apiUrl}/api/pages/?_wfilter[]=domains_id|${domains_id}${navsFilter}&_worder[]=order|ASC&_worder[]=id|DESC`, {
                 headers: {
@@ -377,6 +376,7 @@ export default {
             site,
             navs,
             structNavs: ref(structNavs),
+            domains_id,
             router,
             drag: ref(false),
             usePages: usePages(),

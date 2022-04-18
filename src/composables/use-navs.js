@@ -107,33 +107,37 @@ export const useNavs = function () {
     };
 
 
-    const patchNavOrder = async function (saving, navs) {
+    const patchNavOrder = async function (saving, domains_id, navs) {
 
         saving.status = true;
         const apiUrl = localStorage.getItem("apiUrl") || '';
         let summary = [];
+        let orderData = {
+            domains_id: domains_id,
+            type: 'navs',
+            collection: [],
+        };
 
         for (let i in navs) {
 
-            let patchNav = {
+            orderData.collection.push({
+                id: parseInt(navs[i].id),
                 order: parseInt(i),
-            }
-            //console.log('Patch nav data', patchNav);
-
-            let patchID = navs[i].id;
-            const result = await axios.patch(`${apiUrl}/api/navs/${patchID}`, patchNav, {
-                headers: {
-                    Authorization: localStorage.getItem('session_id'),
-                    'Content-Type': 'application/json'
-                }
             });
-
-            let state = await result.data;
-            summary.push(state);
         }
 
+        const result = await axios.patch(`${apiUrl}/api/order_patch`, orderData, {
+            headers: {
+                Authorization: localStorage.getItem('session_id'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let state = await result.data;
+        summary.push(state);
+
         saving.status = false;
-        //console.log('Site patch summary', summary);
+        console.log('Site patch summary', summary);
 
         return summary;
     };

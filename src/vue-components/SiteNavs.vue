@@ -82,7 +82,7 @@
                         tag="div"
                         handle=".handle"
                         @start="drag = true"
-                        @end="drag = false; useNavs.patchNavOrder(useNavs.saving, navs)"
+                        @end="drag = false; useNavs.patchNavOrder(useNavs.saving, domains_id, navs)"
                         :component-data="{
                             tag: 'div',
                             name: !drag ? 'flip-list' : null,
