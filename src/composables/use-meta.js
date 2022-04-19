@@ -184,14 +184,48 @@ export const useMeta = function () {
             values: [],
         };
 
-        if (meta.type === 'color') {
-
-            default_value = 'rgba(0,0,0,1)';
-        }
+        meta.widget = types()[meta.type].widgets[0];
 
         meta = createDefault(meta, langs, default_value);
 
         return meta;
+    };
+
+
+    const types = function () {
+
+        return {
+            text: {
+                name: 'Text input',
+                widgets: ['text'],
+                default: '',
+            },
+            blob: {
+                name: 'Multiline input',
+                widgets: ['textarea'],
+                default: '',
+            },
+            color: {
+                name: 'Color picker',
+                widgets: ['color'],
+                default: 'rgba(0,0,0,1)',
+            },
+            selection: {
+                name: 'Single selection',
+                widgets: ['radio', 'select'],
+                default: [],
+            },
+            multiple: {
+                name: 'Multiple selection',
+                widgets: ['checkbox'],
+                default: [],
+            },
+            files: {
+                name: 'Files (uploader)',
+                widgets: ['files'],
+                default: false,
+            },
+        };
     };
 
 
@@ -202,6 +236,7 @@ export const useMeta = function () {
             tag: '',
             order: 0,
             type: 'text',
+            widget: 'text',
             validate_as: 'text',
             required: false,
             default: {
@@ -241,6 +276,7 @@ export const useMeta = function () {
         save,
         load,
         reset,
+        types,
         createDefault,
         addDefaultValue,
         removedDefaultValue,

@@ -199,13 +199,75 @@
                                             dark:border-gray-700
                                         "
                                         v-model="meta.type"
-                                        @change="useMeta.reset(meta, site.langs, '')"
+                                        @change="useMeta.reset(meta, site.langs, metaTypes[meta.type].default)"
                                     >
-                                        <option v-for="defaultValue, type in metaTypes" :key="type" :value="type">{{ type }}</option>
+                                        <option v-for="conf, type in metaTypes" :key="type" :value="type">{{ conf.name }}</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
+
+
+
+
+                        <div
+                            class="
+                                sm:grid sm:grid-cols-3
+                                sm:gap-4
+                                sm:items-start
+                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
+                                sm:pt-5
+                            "
+                        >
+                            <label
+                                for="meta_widget"
+                                class="
+                                    block
+                                    text-sm
+                                    font-medium
+                                    text-gray-700
+                                    dark:text-gray-400
+                                    sm:mt-px
+                                    sm:pt-2
+                                    select-none
+                                "
+                            >
+                                Input widget
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div
+                                    class="
+                                        max-w-lg
+                                        flex
+                                        rounded-md
+                                        shadow-sm
+                                    "
+                                >
+                                    <select
+                                        id="meta_widget"
+                                        name="meta_widget"
+                                        class="
+                                            block
+                                            focus:ring-sky-500
+                                            focus:border-sky-500
+                                            w-full
+                                            shadow-sm
+                                            sm:max-w-xs
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            dark:border-gray-700
+                                        "
+                                        v-model="meta.widget"
+                                    >
+                                        <option v-for="widget in metaTypes[meta.type].widgets" :key="widget" :value="widget">{{ widget }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
 
 
 
@@ -381,18 +443,7 @@ export default {
 
         const meta = await useMeta().load(id, site.id, site.langs);
 
-        const metaTypes = {
-            text: '',
-            blob: '',
-            color: '',
-            radio: [],
-            select: [],
-            checkbox: [],
-            bool: [],
-            file: false,
-            files: false,
-        };
-
+        const metaTypes = useMeta().types();
 
         const breadCrumbs = [{
             name: 'Sites',

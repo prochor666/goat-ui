@@ -41,7 +41,7 @@
 
             <div class="py-2">
 
-                <div class="block px-2 py-2" v-if="['blob', 'text', 'file', 'files', 'color'].includes(meta.type)">
+                <div class="block px-2 py-2" v-if="['text', 'blob', 'color', 'files'].includes(meta.type)">
 
                     <div
                         class="
@@ -110,13 +110,13 @@
                                 v-model="meta.default.values[0].value"
                             ></textarea>
 
-                            <span class="text-sm" v-if="['file', 'files'].includes(meta.type)">This type has no default value</span>
+                            <span class="text-sm" v-if="['files'].includes(meta.type)">This type has no default value</span>
                         </div>
                     </div>
 
                 </div>
 
-                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['radio', 'select', 'checkbox'].includes(meta.type)">
+                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['selection', 'multiple'].includes(meta.type)">
 
                     <div class="block border-0 px-2 py-2 mb-2">
 
@@ -289,12 +289,6 @@
 
                 </div>
 
-
-                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['bool'].includes(meta.type)">
-                    <span class="text-md">Bool options</span>
-                </div>
-
-
             </div>
 
         </div>
@@ -377,6 +371,8 @@ export default{
 
     async setup(props, { emit }) {
 
+        const metaTypes = useMeta().types();
+
         const route = useRoute();
         const meta = toRef(props, 'meta');
         const langs = props.langs;
@@ -384,7 +380,7 @@ export default{
         const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false
 
         const colorPicker = {
-            color: '#000000',
+            color: metaTypes[meta.value.type].default,
             suckerCanvas: null,
             suckerArea: [],
             isSucking: false,

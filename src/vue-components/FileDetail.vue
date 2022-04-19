@@ -140,8 +140,8 @@
                                 v-if="file.variants.md === false && file.variants.lg !== false">
 
                             <img class="w-full"
-                                v-if="file.variants.md === false && file.variants.lg === false"
-                                :src="`${apiUrl}/${file.http}`">
+                                :src="`${apiUrl}/${file.http}`"
+                                v-if="file.variants.md === false && file.variants.lg === false">
                         </div>
                     </div>
                     <div class="block w-full grid grid-cols-1 sm-grid-cols-2 gap-2" v-if="switchView(file.mime) == 'video'">
