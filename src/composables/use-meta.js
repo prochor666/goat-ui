@@ -23,6 +23,7 @@ export const useMeta = function () {
             let searchKey = 'created';
 
             modMeta.public = modMeta.public ? 1 : 0;
+            modMeta.required = modMeta.required ? 1 : 0;
             modMeta.domains_id = parseInt(modMeta.domains_id);
             modMeta.order = parseInt(modMeta.order);
 
@@ -40,7 +41,7 @@ export const useMeta = function () {
                 delete (modMeta.id);
             }
 
-            console.log('Nav data', modMeta, requestMethod);
+            //console.log('Meta data send', modMeta, requestMethod);
 
             saving.status = true;
             let x = await utils().sleep(400);
@@ -54,7 +55,7 @@ export const useMeta = function () {
 
             let state = await result.data;
 
-            console.log('Save result state', state);
+            //console.log('Save result state', state);
 
             saving.status = false;
             saving.result = state;
@@ -62,7 +63,7 @@ export const useMeta = function () {
             notify({
                 group: state.data[searchKey] > 0 ? "success" : "error",
                 title: state.data[searchKey] > 0 ? "Done" : "Error",
-                text: state.data[searchKey] > 0 ? "Meta saved successfully" : "Error saving meta data",
+                text: state.data[searchKey] > 0 ? "Meta saved successfully" : state.data['error'] || "Error saving meta data",
             }, 5000);
 
             if (router && state.data[searchKey] > 0) {
@@ -92,7 +93,6 @@ export const useMeta = function () {
 
         if (data.length > 0 && data[0].id > 0) {
 
-            console.log(data);
             return parseInt(data[0].order) + 1;
         }
 
@@ -100,30 +100,34 @@ export const useMeta = function () {
     };
 
 
-    const patchMetaOrder = async function (saving, metas) {
+    const patchMetaOrder = async function (saving, domains_id, metas) {
 
         saving.status = true;
         const apiUrl = localStorage.getItem("apiUrl") || '';
         let summary = [];
+        let orderData = {
+            domains_id: domains_id,
+            type: 'meta',
+            collection: [],
+        };
 
         for (let i in metas) {
 
-            let patchMeta = {
+            orderData.collection.push({
+                id: parseInt(metas[i].id),
                 order: parseInt(i),
-            }
-            //console.log('Patch meta data', patchMeta);
-
-            let patchID = metas[i].id;
-            const result = await axios.patch(`${apiUrl}/api/meta/${patchID}`, patchMeta, {
-                headers: {
-                    Authorization: localStorage.getItem('session_id'),
-                    'Content-Type': 'application/json'
-                }
             });
-
-            let state = await result.data;
-            summary.push(state);
         }
+
+        const result = await axios.patch(`${apiUrl}/api/order_patch`, orderData, {
+            headers: {
+                Authorization: localStorage.getItem('session_id'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let state = await result.data;
+        summary.push(state);
 
         saving.status = false;
         console.log('Meta patch summary', summary);
@@ -156,8 +160,7 @@ export const useMeta = function () {
             names: valueNames,
         });
 
-
-        console.log('addLangValue', meta.default);
+        //console.log('addLangValue', meta.default);
 
         return meta;
     };
@@ -167,7 +170,7 @@ export const useMeta = function () {
 
         for (let i in langs) {
 
-            console.log('add title', meta.default);
+            //console.log('add title', meta.default);
             meta.default.titles[langs[i].alpha2] = '';
         }
 
@@ -189,6 +192,19 @@ export const useMeta = function () {
         meta = createDefault(meta, langs, default_value);
 
         return meta;
+    };
+
+
+    const applicables = function () {
+
+        return {
+            users: 'Users',
+            posts: 'Posts',
+            pages: 'Pages',
+            navs: 'Navs',
+            //groups: 'Groups',
+            //sites: 'Sites',
+        }
     };
 
 
@@ -229,6 +245,33 @@ export const useMeta = function () {
     };
 
 
+    const attach = async function (id, site, target) {
+
+        const apiUrl = localStorage.getItem("apiUrl") || '';
+
+        const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${site.id}&_wfilter=target|${target}&_worder[]=order|ASC&_worder[]=tag|ASC&extract=1`, {
+            headers: {
+                Authorization: localStorage.getItem('session_id'),
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let cache = await r.data.data,
+            data = [];
+
+        if (r.data.data) {
+
+            console.log('Ok', cache);
+            data = cache;
+        } else {
+
+            console.log('Failed to load result', r);
+        }
+
+        return data;
+    };
+
+
     const load = async function (id, domains_id, langs) {
 
         let meta = {
@@ -237,6 +280,7 @@ export const useMeta = function () {
             order: 0,
             type: 'text',
             widget: 'text',
+            target: 'users',
             validate_as: 'text',
             required: false,
             default: {
@@ -259,10 +303,13 @@ export const useMeta = function () {
         });
         let data = await r.data.data;
 
+        //console.log('Meta loaded', data);
+
         if (Object.keys(data).length > 1 && data.id > 0) {
 
             meta = data;
             meta.public = meta.public == 1 ? true : false;
+            meta.required = meta.required == 1 ? true : false;
         }
 
         meta = reactive(meta);
@@ -275,8 +322,10 @@ export const useMeta = function () {
         saving,
         save,
         load,
+        attach,
         reset,
         types,
+        applicables,
         createDefault,
         addDefaultValue,
         removedDefaultValue,

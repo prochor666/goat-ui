@@ -167,6 +167,8 @@ export const useNavs = function () {
 
             nav = data;
             nav.public = nav.public == 1 ? true : false;
+
+            console.log('Found nav', nav);
         }
 
         return nav;

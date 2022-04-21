@@ -79,10 +79,10 @@
                         ghost-class="ghost"
                         animation="200"
                         group="pages"
-                        tag="transition-group"
+                        tag="div"
                         handle=".handle"
                         @start="drag = true"
-                        @end="drag = false; useMeta.patchMetaOrder(useMeta.saving, meta)"
+                        @end="drag = false; useMeta.patchMetaOrder(useMeta.saving, domains_id, meta)"
                         :component-data="{
                             tag: 'div',
                             name: !drag ? 'flip-list' : null,
@@ -131,7 +131,7 @@
                                                             truncate
                                                         "
                                                     >
-                                                        {{ element.name }}
+                                                        {{ useMeta.applicables()[element.target] }}/{{ element.tag }}
                                                     </p>
                                                     <p
                                                         class="
@@ -142,7 +142,7 @@
                                                             dark:text-gray-400
                                                         "
                                                     >
-                                                        <span class="truncate text-sm mr-2">Order: {{ element.order }}</span>
+                                                        <span class="truncate text-sm mr-2">{{ element.type }}: {{ element.widget }}</span>
                                                     </p>
                                                 </div>
                                                 <div class="hidden md:block">
@@ -182,7 +182,7 @@
                                                                 aria-hidden="true"
                                                                 v-if="element.public == 1"
                                                             />
-                                                            {{ element.public == 1 ? 'Published': 'Draft' }}
+                                                            {{ element.public == 1 ? 'Can be used': 'Not used' }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -284,26 +284,28 @@ export default {
 
         const metaLoad = async function()
         {
-            const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=name|ASC`, {
+            const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=tag|ASC`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'
                 }
             });
+
             let cache = await r.data.data,
                 data = [];
 
             if (r.data.data) {
 
                 data = cache;
-                console.log('Loaded result', data);
+                //console.log('Loaded result', data);
             } else {
 
-                console.log('Failed to load result');
+                //console.log('Failed to load result');
             }
 
             return data;
         };
+
         let meta = await metaLoad();
         meta = assignMetaOrderID(meta);
 

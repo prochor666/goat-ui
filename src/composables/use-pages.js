@@ -25,7 +25,7 @@ export const usePages = function () {
 
             modPage.public = modPage.public ? 1 : 0;
             modPage.visible = modPage.visible ? 1 : 0;
-            //modPage.domains_id = parseInt(modPage.domains_id);
+            modPage.domains_id = parseInt(modPage.domains_id);
             modPage.navs_id = parseInt(modPage.navs_id);
             modPage.order = parseInt(modPage.order);
             modPage.posts_page_count = parseInt(modPage.posts_page_count);

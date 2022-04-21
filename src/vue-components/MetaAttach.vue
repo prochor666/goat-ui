@@ -293,6 +293,8 @@
 
         </div>
 
+        <!--  v-if="['text', 'blob', 'file', 'files', 'bool'].includes(meta.type)" -->
+
     </div>
 
 </template>
@@ -322,7 +324,11 @@ export default{
         meta: {
             type: Object,
             default: {},
-        }
+        },
+        values: {
+            type: Object,
+            default: {},
+        },
     },
 
     components: {

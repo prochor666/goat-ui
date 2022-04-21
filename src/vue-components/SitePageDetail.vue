@@ -348,13 +348,12 @@
                                         id="navs_id"
                                         name="navs_id"
                                         class="
-                                            max-w-lg
                                             block
                                             focus:ring-sky-500
                                             focus:border-sky-500
                                             w-full
                                             shadow-sm
-                                            sm:max-w-xs
+                                            sm:max-w-lg
                                             sm:text-sm
                                             border-gray-300
                                             rounded-md
@@ -482,13 +481,12 @@
                                         id="posts_order"
                                         name="posts_order"
                                         class="
-                                            max-w-lg
                                             block
                                             focus:ring-sky-500
                                             focus:border-sky-500
                                             w-full
                                             shadow-sm
-                                            sm:max-w-xs
+                                            sm:max-w-lg
                                             sm:text-sm
                                             border-gray-300
                                             rounded-md

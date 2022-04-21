@@ -72,7 +72,7 @@ import {
     HomeIcon,
     CheckIcon,
     MenuAlt1Icon,
-    PlusCircleIcon,
+    TagIcon,
     UsersIcon,
     UserGroupIcon,
     MenuIcon,
@@ -98,6 +98,7 @@ export default {
         FolderOpenIcon,
         HomeIcon,
         MenuAlt1Icon,
+        TagIcon,
         UsersIcon,
         CubeIcon,
 
@@ -149,7 +150,7 @@ export default {
                 name: 'Meta',
                 href: 'meta',
                 current: route.name === 'meta' || route.name === 'meta-detail',
-                icon: PlusCircleIcon
+                icon: TagIcon
             },
         ];
 

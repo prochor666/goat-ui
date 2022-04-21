@@ -30,12 +30,11 @@
                     "
                 >
                     <div class="mt-4 sm:mt-2 flex items-center text-sm text-gray-500" v-if="meta.id > 0">
-                        <BriefcaseIcon
+                        <TagIcon
                             class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                             aria-hidden="true"
                         />
-
-                        {{ meta.name }}
+                        {{ meta.target }}/{{ meta.tag }}
                     </div>
                     <div class="mt-4 sm:mt-2 flex items-center text-sm text-gray-500" v-if="meta.id > 0">
                         <CalendarIcon
@@ -96,6 +95,69 @@
 
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
 
+
+
+
+                        <div
+                            class="
+                                sm:grid sm:grid-cols-3
+                                sm:gap-4
+                                sm:items-start
+                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
+                                sm:pt-5
+                            "
+                        >
+                            <label
+                                for="meta_target"
+                                class="
+                                    block
+                                    text-sm
+                                    font-medium
+                                    text-gray-700
+                                    dark:text-gray-400
+                                    sm:mt-px
+                                    sm:pt-2
+                                    select-none
+                                "
+                            >
+                                Target
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div
+                                    class="
+                                        max-w-lg
+                                        flex
+                                        rounded-md
+                                        shadow-sm
+                                    "
+                                >
+                                    <select
+                                        id="meta_target"
+                                        name="meta_target"
+                                        class="
+                                            block
+                                            focus:ring-sky-500
+                                            focus:border-sky-500
+                                            w-full
+                                            shadow-sm
+                                            sm:max-w-lg
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            dark:border-gray-700
+                                        "
+                                        v-model="meta.target"
+                                    >
+                                        <option v-for="name, target in useMeta.applicables()" :key="target" :value="target">{{ name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                         <div
                             class="
                                 sm:grid sm:grid-cols-3
@@ -148,6 +210,8 @@
                         </div>
 
 
+
+
                         <div
                             class="
                                 sm:grid sm:grid-cols-3
@@ -190,7 +254,7 @@
                                             focus:border-sky-500
                                             w-full
                                             shadow-sm
-                                            sm:max-w-xs
+                                            sm:max-w-lg
                                             sm:text-sm
                                             border-gray-300
                                             rounded-md
@@ -252,7 +316,7 @@
                                             focus:border-sky-500
                                             w-full
                                             shadow-sm
-                                            sm:max-w-xs
+                                            sm:max-w-lg
                                             sm:text-sm
                                             border-gray-300
                                             rounded-md
@@ -377,7 +441,6 @@ import {
     SwitchLabel,
 } from '@headlessui/vue';
 import {
-    BriefcaseIcon,
     CalendarIcon,
     CheckCircleIcon,
     CheckIcon,
@@ -386,6 +449,7 @@ import {
 } from '@heroicons/vue/solid';
 import {
     RefreshIcon,
+    TagIcon,
 } from '@heroicons/vue/outline';
 
 
@@ -403,7 +467,7 @@ export default {
         SwitchGroup,
         SwitchDescription,
         SwitchLabel,
-        BriefcaseIcon,
+        TagIcon,
         CalendarIcon,
         CheckCircleIcon,
         CheckIcon,
@@ -431,7 +495,7 @@ export default {
         });
 
         const domains_id = parseInt(route.params.id || 0);
-        const id = parseInt(route.params.navid || 0);
+        const id = parseInt(route.params.metaid || 0);
         const pageTitle = id === 0 ? 'New meta' : 'Edit meta';
 
         const site = await useSites().load(domains_id);
