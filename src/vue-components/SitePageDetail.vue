@@ -704,6 +704,7 @@ export default {
 
         const domains_id = parseInt(route.params.id || 0);
         const id = parseInt(route.params.pageid || 0);
+        const lang = route.params.lang || '';
         const pageTitle = id === 0 ? 'New page' : 'Edit page';
 
         const maxDescriptionLength = 550;
@@ -716,6 +717,7 @@ export default {
                 params: {
                     id: domains_id,
                     pageid: id,
+                    lang:lang,
                 }
             },
             count: false,
@@ -727,6 +729,7 @@ export default {
                 params: {
                     id: domains_id,
                     pageid: id,
+                    lang: lang,
                 }
             },
             count: false,
@@ -773,7 +776,8 @@ export default {
             route: {
                 name: 'pages',
                 params: {
-                    id: site.id
+                    id: site.id,
+                    lang: lang,
                 }
             }
         }];

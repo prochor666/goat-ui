@@ -24,6 +24,17 @@ export const utils = function () {
     };
 
 
+    const validateMeta = function (saving, metatags) {
+
+        for (let i in metatags) {
+
+            saving.meta[metatags[i].tag] = metatags[i].realvalue.value === false ? false : true;
+        }
+
+        return saving;
+    };
+
+
     const formatBytes = function (bytes, decimals = 2) {
 
         if (bytes === 0) {
@@ -74,6 +85,7 @@ export const utils = function () {
     return {
         sleep,
         keeper,
+        validateMeta,
         decodePath,
         encodePath,
         formatBytes,

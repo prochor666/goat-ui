@@ -566,20 +566,29 @@ export default {
         const langsActive = ref(false);
         const reopenKey = ref(utils().getRndKey());
 
+        const lang = route.params.lang || site.lang_default;
+
+
         const breadCrumbs = [{
             name: 'Sites',
             route: {
                 name: 'sites',
             }
-        },{
-            name: site.name,
-            route: {
-                name: 'pages',
-                params: {
-                    id: site.id
+        },];
+
+        if (site.id > 0) {
+
+            breadCrumbs.push({
+                name: site.name,
+                route: {
+                    name: 'pages',
+                    params: {
+                        id: site.id,
+                        lang: lang,
+                    }
                 }
-            }
-        }];
+            });
+        }
 
         return {
             site: ref(site),

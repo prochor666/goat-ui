@@ -49,7 +49,7 @@
                             focus:ring-offset-gray-50
                             focus:ring-sky-500
                         "
-                        @click="router.push(`/sites/${domains_id}/navs/0`)"
+                        @click="router.push(`/sites/${domains_id}/${lang}/navs/0`)"
                     >
                         <PlusCircleIcon
                             class="-ml-1 mr-2 h-5 w-5"
@@ -266,6 +266,7 @@ export default {
         const router = useRouter();
         const apiUrl = route.meta.apiUrl;
         const domains_id = parseInt(route.params.id || 0);
+        const lang = route.params.lang || '';
         const site = await useSites().load(domains_id);
 
         if (site.id === 0) {
@@ -275,26 +276,41 @@ export default {
 
         const assignNavsOrderID = function(navs)
         {
-            return navs.filter((nav) => {
-                nav.orderID = nav.id;
-                return true;
-            });
+            if (typeof navs === 'object') {
+
+                return navs.filter((nav) => {
+                    if (typeof nav === 'object') {
+                        nav.orderID = nav.id;
+                        return true;
+                    }
+                });
+            }
+
+            return [];
         };
 
 
         const navsLoad = async function()
         {
-            const r = await axios.get(`${apiUrl}/api/navs/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=name|ASC`, {
+            const r = await axios.get(`${apiUrl}/api/navs/?_wfilter[]=domains_id|${domains_id}&_wfilter[]=lang|${lang}&_worder[]=order|ASC&_worder[]=name|ASC`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'
                 }
             });
-            let data = await r.data.data;
-            return data;
+            let data = await r.data;
+
+            if (data.data) {
+
+                return data.data;
+            }
+
+            return [];
         };
         let navs = await navsLoad();
         navs = assignNavsOrderID(navs);
+
+        console.log('Found navs', navs);
 
         const breadCrumbs = [{
             name: 'Sites',
@@ -315,6 +331,7 @@ export default {
             site,
             navs: ref(navs),
             domains_id,
+            lang,
             router,
             drag: ref(false),
             useNavs: useNavs(),

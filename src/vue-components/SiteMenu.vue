@@ -17,7 +17,7 @@
             </TransitionChild>
             <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto bg-white dark:bg-gray-900">
                 <nav class="mt-2 px-2 space-y-1">
-                    <router-link v-for="item in navigation" :to="{ name: item.href }" :key="item.name" :class="[item.current ? 'text-sky-800 dark:text-sky-400 bg-gray-200 dark:bg-gray-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
+                    <router-link v-for="item in navigation" :to="{ name: item.href, params: item.params }" :key="item.name" :class="[item.current ? 'text-sky-800 dark:text-sky-400 bg-gray-200 dark:bg-gray-800' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900', 'group flex items-center px-2 py-2 text-base font-medium rounded-md']">
                         <component :is="item.icon" :class="[item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-4 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                         {{ item.name }}
                     </router-link>
@@ -39,7 +39,7 @@
             <div class="flex-1 flex flex-col min-h-0 border-r border-gray-200 dark:border-gray-800 pr-2">
                 <div class="flex-1 flex flex-col pb-4 overflow-y-auto">
                     <nav class="mt-52flex-1 px-2 space-y-1">
-                        <router-link v-for="item in navigation" :to="{ name: item.href }" :key="item.href" :class="[item.current ? 'text-sky-800 dark:text-sky-400 bg-gray-200 dark:bg-gray-800' : 'text-gray-600 dark:text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-400', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
+                        <router-link v-for="item in navigation" :to="{ name: item.href, params: item.params }" :key="item.href" :class="[item.current ? 'text-sky-800 dark:text-sky-400 bg-gray-200 dark:bg-gray-800' : 'text-gray-600 dark:text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-400', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']">
                             <component :is="item.icon" :class="[item.current ? 'text-sky-800 dark:text-sky-400' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']" aria-hidden="true" />
                             {{ item.name }}
                         </router-link>
@@ -120,35 +120,57 @@ export default {
         const route = useRoute();
         const router = useRouter();
         const sidebarOpen = ref(false);
+        const domains_id = parseInt(route.params.id || 0);
+        const lang = route.params.lang || '';
 
         const navigation = [
             {
                 name: 'Pages',
                 href: 'pages',
+                params: {
+                    id: domains_id,
+                    lang: lang,
+                },
                 current: route.name === 'pages' || route.name === 'page-detail',
                 icon: DocumentTextIcon
             },
             {
                 name: 'Navs',
                 href: 'navs',
+                params: {
+                    id: domains_id,
+                    lang: lang,
+                },
                 current: route.name === 'navs' || route.name === 'nav-detail',
                 icon: MenuAlt1Icon
             },
             {
                 name: 'Edit site',
                 href: 'site-detail',
+                params: {
+                    id: domains_id,
+                    lang: lang,
+                },
                 current: route.name === 'site-detail',
                 icon: CubeIcon
             },
             {
                 name: 'File manager',
                 href: 'files',
+                params: {
+                    id: domains_id,
+                    lang: lang,
+                },
                 current: route.name === 'files',
                 icon: FolderOpenIcon
             },
             {
                 name: 'Meta',
                 href: 'meta',
+                params: {
+                    id: domains_id,
+                    lang: lang,
+                },
                 current: route.name === 'meta' || route.name === 'meta-detail',
                 icon: TagIcon
             },
@@ -158,6 +180,8 @@ export default {
             route,
             navigation,
             sidebarOpen,
+            domains_id,
+            lang,
         };
     },
 };

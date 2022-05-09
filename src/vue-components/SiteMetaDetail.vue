@@ -120,7 +120,7 @@
                                     select-none
                                 "
                             >
-                                Target
+                                Target/tag
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <div
@@ -129,6 +129,8 @@
                                         flex
                                         rounded-md
                                         shadow-sm
+                                        text-gray-700
+                                        dark:text-gray-400
                                     "
                                 >
                                     <select
@@ -144,6 +146,7 @@
                                             sm:text-sm
                                             border-gray-300
                                             rounded-md
+                                            text-gray-900
                                             dark:text-gray-400
                                             dark:bg-gray-900
                                             dark:border-gray-700
@@ -152,6 +155,32 @@
                                     >
                                         <option v-for="name, target in useMeta.applicables()" :key="target" :value="target">{{ name }}</option>
                                     </select>
+                                    <div class="px-1 py-2">/</div>
+                                    <input
+                                        id="tag"
+                                        name="tag"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Enter meta tag name"
+                                        class="
+                                            block
+                                            max-w-lg
+                                            w-full
+                                            shadow-sm
+                                            focus:ring-sky-500
+                                            focus:border-sky-500
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            dark:border-gray-700
+                                        "
+                                        v-model="meta.tag"
+                                        @input="lowerCase($event)"
+                                    />
+
+
                                 </div>
                             </div>
                         </div>
@@ -180,32 +209,26 @@
                                     select-none
                                 "
                             >
-                                Tag
+                                Required
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input
-                                    id="tag"
-                                    name="tag"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Enter meta tag name"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    "
-                                    v-model="meta.tag"
-                                    @input="lowerCase($event)"
-                                />
+
+                                <SwitchGroup as="div" class="flex items-center justify-between">
+                                    <Switch v-model="meta.required" :class="[meta.required ? 'bg-amber-600 focus:ring-amber-400' : 'bg-gray-200 dark:bg-gray-600 focus:ring-teal-400', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
+                                        <span aria-hidden="true" :class="[meta.required ? 'translate-x-5 bg-amber-200 dark:bg-amber-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
+                                    </Switch>
+
+                                    <span class="flex-grow flex flex-col ml-4" v-if="meta.required">
+                                        <SwitchLabel as="span" class="text-sm font-medium text-amber-700 select-none" passive>Required</SwitchLabel>
+                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">This tag is required.</SwitchDescription>
+                                    </span>
+
+                                    <span class="flex-grow flex flex-col ml-4" v-if="!meta.required">
+                                        <SwitchLabel as="span" class="text-sm font-medium text-teal-500 select-none" passive>Not required</SwitchLabel>
+                                        <SwitchDescription as="span" class="text-sm text-gray-500 select-none">This tag is not required.</SwitchDescription>
+                                    </span>
+                                </SwitchGroup>
+
                             </div>
                         </div>
 
@@ -327,6 +350,67 @@
                                         v-model="meta.widget"
                                     >
                                         <option v-for="widget in metaTypes[meta.type].widgets" :key="widget" :value="widget">{{ widget }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div
+                            class="
+                                sm:grid sm:grid-cols-3
+                                sm:gap-4
+                                sm:items-start
+                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
+                                sm:pt-5
+                            "
+                        >
+                            <label
+                                for="meta_validate"
+                                class="
+                                    block
+                                    text-sm
+                                    font-medium
+                                    text-gray-700
+                                    dark:text-gray-400
+                                    sm:mt-px
+                                    sm:pt-2
+                                    select-none
+                                "
+                            >
+                                Validate as
+                            </label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div
+                                    class="
+                                        max-w-lg
+                                        flex
+                                        rounded-md
+                                        shadow-sm
+                                    "
+                                >
+                                    <select
+                                        id="meta_validate"
+                                        name="meta_validate"
+                                        class="
+                                            block
+                                            focus:ring-sky-500
+                                            focus:border-sky-500
+                                            w-full
+                                            shadow-sm
+                                            sm:max-w-lg
+                                            sm:text-sm
+                                            border-gray-300
+                                            rounded-md
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            dark:border-gray-700
+                                        "
+                                        v-model="meta.validate_as"
+                                    >
+                                        <option v-for="val in metaTypes[meta.type].validate_as" :key="val" :value="val">{{ useMeta.validateAs()[val].name }}</option>
                                     </select>
                                 </div>
                             </div>

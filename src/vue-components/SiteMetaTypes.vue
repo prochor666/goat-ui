@@ -41,7 +41,7 @@
 
             <div class="py-2">
 
-                <div class="block px-2 py-2" v-if="['text', 'blob', 'color', 'files'].includes(meta.type)">
+                <div class="block px-2 py-2" v-if="['text', 'blob', 'files'].includes(meta.type)">
 
                     <div
                         class="
@@ -87,18 +87,6 @@
                                 v-model="meta.default.values[0].value"
                             />
 
-                            <ColorPicker
-                                :theme="darkTheme === true ? 'dark': 'light'"
-                                :color="meta.default.values[0].value"
-                                :sucker-hide="false"
-                                :sucker-canvas="colorPicker.suckerCanvas"
-                                :sucker-area="colorPicker.suckerArea"
-                                @changeColor="changeSingleColor"
-                                class="p-4"
-                                @openSucker="openSucker"
-                                v-if="['color'].includes(meta.type)"
-                            />
-
                             <textarea
                                 type="text"
                                 name="default-blob-value"
@@ -115,6 +103,74 @@
                     </div>
 
                 </div>
+
+
+
+                <div class="block px-2 py-2" v-if="['color'].includes(meta.type)">
+
+                    <div
+                        class="
+                            block
+                        "
+                    >
+                        <label
+                            :for="`default-${meta.type}-value`"
+                            class="
+                                block
+                                text-sm
+                                font-medium
+                                text-gray-700
+                                dark:text-gray-400
+                                mb-2
+                                select-none
+                            "
+                        >
+                            Default value
+                        </label>
+                        <div class="mt-1 sm:mt-0 flex">
+
+                            <div class="flex border p-0 border-gray-300 dark:border-gray-700 rounded-md shadow-sm group">
+
+                                <div class="flex-1">
+                                    <input
+                                        :id="`default-${meta.type}-value`"
+                                        name="option-value"
+                                        type="text"
+                                        autocomplete="off"
+                                        placeholder="Enter option value"
+                                        class="
+                                            w-full
+                                            sm:text-sm
+                                            dark:text-gray-400
+                                            dark:bg-gray-900
+                                            border-0
+                                            rounded-l-md
+                                            focus:ring-2
+                                            focus:ring-offset-gray-50
+                                            focus:ring-sky-500
+                                            dark:focus:ring-sky-700
+                                        "
+                                        v-model="meta.default.values[0].value"
+                                    />
+                                </div>
+
+                                <div class="flex-none pt-1 pl-2">
+                                    <color-picker
+                                        v-model:pureColor="meta.default.values[0].value"
+                                        v-model:gradientColor="defaultGradient"
+                                        pickerType="fk"
+                                        useType="pure"
+                                        shape="circle"
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
 
                 <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['selection', 'multiple'].includes(meta.type)">
 
@@ -303,8 +359,8 @@ import { useRoute, useRouter } from 'vue-router';
 import useMeta from '../composables/use-meta';
 import utils from '../composables/utils';
 
-import { ColorPicker } from 'vue-color-kit';
-import 'vue-color-kit/dist/vue-color-kit.css';
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 import {
     PlusCircleIcon,
@@ -344,24 +400,6 @@ export default{
             this.$emit('reload-needed', allLangs);
         },
 
-        changeSingleColor(color) {
-
-            const { r, g, b, a } = color.rgba;
-            this.meta.default.values[0].value = `rgba(${r}, ${g}, ${b}, ${a})`;
-            console.log(this.meta.default.values[0]);
-        },
-
-
-        openSucker(isOpen) {
-            if (isOpen) {
-                // ... canvas be created
-                // this.suckerCanvas = canvas
-                // this.suckerArea = [x1, y1, x2, y2]
-            } else {
-                // this.suckerCanvas && this.suckerCanvas.remove
-            }
-        },
-
         lowerCase(e) {
             e.target.value = e.target.value.toLowerCase();
         },
@@ -375,20 +413,15 @@ export default{
         const meta = toRef(props, 'meta');
         const langs = props.langs;
         const apiUrl = route.meta.apiUrl;
-        const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false
+        const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false;
 
-        const colorPicker = {
-            color: metaTypes[meta.value.type].default,
-            suckerCanvas: null,
-            suckerArea: [],
-            isSucking: false,
-        }
+        const defaultGradient = ref("linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)");
 
         return {
             langs,
             meta,
             apiUrl,
-            colorPicker,
+            defaultGradient,
             darkTheme,
             useMeta: useMeta(),
        }

@@ -136,7 +136,7 @@
                 </div>
 
                 <div class="space-y-8 sm:space-y-5">
-                    <div>
+                    <div class="pt-4">
                         <h3
                             class="
                                 text-lg
@@ -153,43 +153,18 @@
                         </p>
                     </div>
 
-                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5" v-for="meta in nav.meta" :key="meta.id">
+                </div>
 
-                        <div
-                            class="
-                                sm:grid sm:grid-cols-3
-                                sm:gap-4
-                                sm:items-start
-                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
-                                sm:pt-5
-                            "
-                        >
-                            <label
-                                :for="`m-${meta.tag}`"
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
-                                    dark:text-gray-400
-                                    sm:mt-px
-                                    sm:pt-2
-                                "
-                            >
-                                {{ meta.tag }}
-                            </label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input
-                                    :id="`m-${meta.tag}`"
-                                    name="name"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Enter nav name"
-                                    :class="[saving.result.required.name === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500', 'flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900']"
-                                    v-model="meta.default.values[0].value"
-                                />
-                            </div>
-                        </div>
+
+                <div class="space-y-8 sm:space-y-5" v-for="m in nav.metatags" :key="m.id">
+
+                    <div class="mt-3">
+
+                        <MetaAttach
+                            :meta="m"
+                            :lang="nav.lang"
+                            :valid="saving.meta[m.tag]"
+                        />
 
                     </div>
 
@@ -255,6 +230,7 @@ import { useRoute, useRouter } from 'vue-router';
 import MainMenu from './MainMenu.vue';
 import PageTitle from './PageTitle.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
+import MetaAttach from './MetaAttach.vue';
 import useNavs from '../composables/use-navs';
 import useSites from '../composables/use-sites';
 import useMeta from '../composables/use-meta';
@@ -287,6 +263,7 @@ export default {
         MainMenu,
         PageTitle,
         Breadcrumbs,
+        MetaAttach,
         Menu,
         MenuButton,
         MenuItem,
@@ -324,10 +301,12 @@ export default {
                     name: true,
                 }
             },
+            meta: {}
         });
 
         const domains_id = parseInt(route.params.id || 0);
         const id = parseInt(route.params.navid || 0);
+        const lang = route.params.lang || '';
         const pageTitle = id === 0 ? 'New nav' : 'Edit nav';
 
         const site = await useSites().load(domains_id);
@@ -338,8 +317,19 @@ export default {
         }
 
         const nav = await useNavs().load(id, site.id);
+        //const meta = await useMeta().attach(id, site, 'navs');
 
-        nav.meta = []; //await useMeta().attach(id, site, 'navs');
+        //nav.metavalues = {};
+        //nav.metavalues = useMeta().assign(nav.metatags, nav.metavalues);
+
+        console.log('Found nav', nav);
+
+        if (!nav.lang) {
+
+            nav.lang = lang;
+        }
+
+
 
         const breadCrumbs = [{
             name: 'Sites',

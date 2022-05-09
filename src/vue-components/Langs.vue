@@ -40,6 +40,7 @@
                                         h-4
                                         w-4
                                         text-sky-600
+                                        dark:text-sky-800
                                         border-gray-300
                                         dark:border-gray-500
                                         dark:bg-gray-700

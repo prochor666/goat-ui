@@ -75,7 +75,10 @@
                     <router-link
                         :to="{
                             name: 'pages',
-                            params: { id: site.id }
+                            params: {
+                                id: site.id,
+                                lang: site.lang_default
+                            }
                         }"
                         class="group block hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
@@ -247,6 +250,9 @@ export default {
         Pagination.options.items = sites;
 
         Pagination.pageize(Pagination.options.page);
+
+
+        console.log(Pagination.options.result);
 
         const breadCrumbs = [{
             name: 'Sites',

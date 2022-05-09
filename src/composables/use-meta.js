@@ -10,7 +10,7 @@ let saving = reactive({
 
 export const useMeta = function () {
 
-    let save = async function (saving, meta, router) {
+    const save = async function (saving, meta, router) {
 
         try {
 
@@ -136,6 +136,22 @@ export const useMeta = function () {
     };
 
 
+    const assign = function (meta, metavalues) {
+
+        for (let i in meta) {
+
+            if (!metavalues.hasOwnProperty(meta[i].tag)) {
+
+                metavalues[meta[i].tag] = {
+                    value: meta[i].default.values,
+                }
+            }
+        }
+
+        return metavalues;
+    };
+
+
     const removedDefaultValue = function (meta, removeIndex) {
 
         meta.default.values = meta.default.values.filter(function (value, index, arr) {
@@ -188,6 +204,7 @@ export const useMeta = function () {
         };
 
         meta.widget = types()[meta.type].widgets[0];
+        meta.validate_as = types()[meta.type].validate_as[0];
 
         meta = createDefault(meta, langs, default_value);
 
@@ -208,6 +225,84 @@ export const useMeta = function () {
     };
 
 
+    const mysql_real_escape_string = function(str) {
+        return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+            switch (char) {
+                case "\0":
+                    return "\\0";
+                case "\x08":
+                    return "\\b";
+                case "\x09":
+                    return "\\t";
+                case "\x1a":
+                    return "\\z";
+                case "\n":
+                    return "\\n";
+                case "\r":
+                    return "\\r";
+                case "\"":
+                case "'":
+                case "\\":
+                case "%":
+                    return "\\" + char; // prepends a backslash to backslash, percent,
+                // and double/single quotes
+                default:
+                    return char;
+            }
+        });
+    }
+
+
+
+    const validateAs = function () {
+
+        return {
+            string: {
+                name: 'Text',
+            },
+            color: {
+                name: 'Color RGB(A) or HEX',
+            },
+            email: {
+                name: 'Email',
+            },
+            url: {
+                name: 'Url',
+            },
+            domain: {
+                name: 'Domain',
+            },
+            numeric: {
+                name: 'Numeric',
+            },
+            int: {
+                name: 'Integer',
+            },
+            float: {
+                name: 'Float',
+            },
+            ip: {
+                name: 'IP address (Ipv4 or IPv6)',
+            },
+            mac: {
+                name: 'MAC asddress',
+            },
+            array: {
+                name: 'Array (accept empty)',
+            },
+            array_non_empty: {
+                name: 'Array (at least one item required)',
+            },
+            file: {
+                name: 'File exists',
+            },
+            files: {
+                name: 'At least one file exists',
+            },
+        };
+    };
+
+
     const types = function () {
 
         return {
@@ -215,60 +310,62 @@ export const useMeta = function () {
                 name: 'Text input',
                 widgets: ['text'],
                 default: '',
+                validate_as: [
+                    'string',
+                    'email',
+                    'url',
+                    'domain',
+                    'numeric',
+                    'int',
+                    'float',
+                    'ip',
+                    'mac',
+                ],
             },
             blob: {
                 name: 'Multiline input',
                 widgets: ['textarea'],
                 default: '',
+                validate_as: [
+                    'string',
+                    'url',
+                ],
             },
             color: {
                 name: 'Color picker',
                 widgets: ['color'],
                 default: 'rgba(0,0,0,1)',
+                validate_as: [
+                    'color',
+                ],
             },
             selection: {
                 name: 'Single selection',
                 widgets: ['radio', 'select'],
-                default: [],
+                default: '',
+                validate_as: [
+                    'string',
+                ],
             },
             multiple: {
                 name: 'Multiple selection',
                 widgets: ['checkbox'],
                 default: [],
+                validate_as: [
+                    'array',
+                    'array_non_empty',
+                ],
             },
             files: {
                 name: 'Files (uploader)',
                 widgets: ['files'],
                 default: false,
+                validate_as: [
+                    'file',
+                    'files',
+                ],
             },
         };
-    };
-
-
-    const attach = async function (id, site, target) {
-
-        const apiUrl = localStorage.getItem("apiUrl") || '';
-
-        const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${site.id}&_wfilter=target|${target}&_worder[]=order|ASC&_worder[]=tag|ASC&extract=1`, {
-            headers: {
-                Authorization: localStorage.getItem('session_id'),
-                'Content-Type': 'application/json'
-            }
-        });
-
-        let cache = await r.data.data,
-            data = [];
-
-        if (r.data.data) {
-
-            console.log('Ok', cache);
-            data = cache;
-        } else {
-
-            console.log('Failed to load result', r);
-        }
-
-        return data;
     };
 
 
@@ -281,7 +378,7 @@ export const useMeta = function () {
             type: 'text',
             widget: 'text',
             target: 'users',
-            validate_as: 'text',
+            validate_as: 'string',
             required: false,
             default: {
                 titles: {},
@@ -303,7 +400,7 @@ export const useMeta = function () {
         });
         let data = await r.data.data;
 
-        //console.log('Meta loaded', data);
+        console.log('Meta loaded', data);
 
         if (Object.keys(data).length > 1 && data.id > 0) {
 
@@ -322,7 +419,8 @@ export const useMeta = function () {
         saving,
         save,
         load,
-        attach,
+        validateAs,
+        assign,
         reset,
         types,
         applicables,

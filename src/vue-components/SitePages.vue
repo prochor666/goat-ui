@@ -293,7 +293,7 @@ export default {
         const apiUrl = route.meta.apiUrl;
 
         const domains_id = parseInt(route.params.id || 0);
-        //const navs_id = parseInt(route.params.id || 0);
+        const lang = route.params.lang || '';
 
         const site = await useSites().load(domains_id);
 
@@ -309,12 +309,15 @@ export default {
 
             for (let nav in navs) {
 
-                navs[nav].pages = pages.filter((page) => {
-                    page.orderID = page.id;
-                    return page.navs_id == navs[nav].id;
-                });
+                if (typeof navs[nav] === 'object') {
 
-                newNavs.push(navs[nav]);
+                    navs[nav].pages = pages.filter((page) => {
+                        page.orderID = page.id;
+                        return page.navs_id == navs[nav].id;
+                    });
+
+                    newNavs.push(navs[nav]);
+                }
             }
 
             return newNavs;
@@ -329,8 +332,14 @@ export default {
                     'Content-Type': 'application/json'
                 }
             });
-            let data = await r.data.data;
-            return data;
+            let data = await r.data;
+
+            if (data.data) {
+
+                return data.data;
+            }
+
+            return [];
         };
         let navs = await navsLoad(domains_id);
 
@@ -350,10 +359,18 @@ export default {
                     'Content-Type': 'application/json'
                 }
             });
-            let data = await r.data.data;
-            return data;
+            let data = await r.data;
+
+            if (data.data) {
+
+                return data.data;
+            }
+
+            return [];
         };
         const pages = await pagesLoad(navs, domains_id);
+
+        console.log('pages dump', navs);
 
         const structNavs = assignPagesToNavs(navs, pages);
 
@@ -367,7 +384,8 @@ export default {
             route: {
                 name: 'pages',
                 params: {
-                    id: site.id
+                    id: site.id,
+                    lang: lang,
                 }
             }
         }];

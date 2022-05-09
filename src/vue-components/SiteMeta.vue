@@ -49,7 +49,7 @@
                             focus:ring-offset-gray-50
                             focus:ring-sky-500
                         "
-                        @click="router.push(`/sites/${domains_id}/meta/0`)"
+                        @click="router.push(`/sites/${domains_id}/${lang}/meta/0`)"
                     >
                         <PlusCircleIcon
                             class="-ml-1 mr-2 h-5 w-5"
@@ -273,6 +273,8 @@ export default {
             document.location = '/sites';
         }
 
+        const lang = route.params.lang || site.lang_default;
+
         const assignMetaOrderID = function(meta)
         {
             return meta.filter((m) => {
@@ -284,26 +286,26 @@ export default {
 
         const metaLoad = async function()
         {
-            const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=tag|ASC`, {
+            const r = await axios.get(`${apiUrl}/api/meta/?_wfilter=domains_id|${domains_id}&_worder[]=order|ASC&_worder[]=tag|ASC&extract=1`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'
                 }
             });
 
-            let cache = await r.data.data,
+            let cache = await r.data,
                 data = [];
 
-            if (r.data.data) {
+            if (cache.data) {
 
-                data = cache;
-                //console.log('Loaded result', data);
-            } else {
-
-                //console.log('Failed to load result');
+                data = cache.data;
+                console.log('Loaded result', data);
+                return data;
             }
 
-            return data;
+            //console.log('Failed to load result');
+
+            return [];
         };
 
         let meta = await metaLoad();
@@ -319,7 +321,8 @@ export default {
             route: {
                 name: 'pages',
                 params: {
-                    id: domains_id
+                    id: domains_id,
+                    lang: lang,
                 }
             }
         }];
@@ -328,6 +331,7 @@ export default {
             site,
             meta: ref(meta),
             domains_id,
+            lang,
             router,
             drag: ref(false),
             useMeta: useMeta(),

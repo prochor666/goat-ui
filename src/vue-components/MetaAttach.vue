@@ -3,66 +3,27 @@
     <div class="block py-2" :key="meta.type">
 
         <div
-            class="sm:grid sm:grid-cols-2 sm:gap-4"
+            class="sm:grid sm:grid-cols-3 sm:gap-4"
         >
             <div class="py-2">
-
-                <div v-for="title, lang in meta.default.titles" :key="`opt-${lang}`" class="px-2 py-2">
-
-                    <label class="inline-block mb-2 text-sm font-medium select-none" :for="`name-${lang}`">
-                        Title ({{ lang }})
-                    </label>
-
-                    <input
-                        :id="`name-${lang}`"
-                        name="name"
-                        type="text"
-                        autocomplete="off"
-                        placeholder="Enter meta name"
-                        class="
-                            block
-                            max-w-lg
-                            w-full
-                            shadow-sm
-                            focus:ring-sky-500
-                            focus:border-sky-500
-                            sm:text-sm
-                            border-gray-300
-                            rounded-md
-                            dark:text-gray-400
-                            dark:bg-gray-900
-                            dark:border-gray-700
-                        "
-                        v-model="meta.default.titles[lang]"
-                    />
-
+                <div class="pt-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+                    {{ meta.default.titles[lang] }}
+                </div>
+                <div class="pt-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+                    {{ meta.target }}/{{ meta.tag }}
                 </div>
             </div>
 
-            <div class="py-2">
+            <div class="py-2 sm:col-span-2">
 
-                <div class="block px-2 py-2" v-if="['text', 'blob', 'color', 'files'].includes(meta.type)">
+                <div class="block py-2" v-if="['text', 'blob', 'files'].includes(meta.type)">
 
                     <div
                         class="
                             block
                         "
                     >
-                        <label
-                            :for="`default-${meta.type}-value`"
-                            class="
-                                block
-                                text-sm
-                                font-medium
-                                text-gray-700
-                                dark:text-gray-400
-                                mb-2
-                                select-none
-                            "
-                        >
-                            Default value
-                        </label>
-                        <div class="mt-1 sm:mt-0">
+                        <div class="mt-1 sm:mt-0 flex">
                             <input
                                 :id="`default-${meta.type}-value`"
                                 name="default"
@@ -74,29 +35,15 @@
                                     max-w-lg
                                     w-full
                                     shadow-sm
-                                    focus:ring-sky-500
-                                    focus:border-sky-500
                                     sm:text-sm
-                                    border-gray-300
                                     rounded-md
+                                    text-gray-900
                                     dark:text-gray-400
                                     dark:bg-gray-900
-                                    dark:border-gray-700
                                 "
+                                :class="[valid === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500']"
                                 v-if="['text', 'color'].includes(meta.type)"
-                                v-model="meta.default.values[0].value"
-                            />
-
-                            <ColorPicker
-                                :theme="darkTheme === true ? 'dark': 'light'"
-                                :color="meta.default.values[0].value"
-                                :sucker-hide="false"
-                                :sucker-canvas="colorPicker.suckerCanvas"
-                                :sucker-area="colorPicker.suckerArea"
-                                @changeColor="changeSingleColor"
-                                class="p-4"
-                                @openSucker="openSucker"
-                                v-if="['color'].includes(meta.type)"
+                                v-model="meta.realvalue.value"
                             />
 
                             <textarea
@@ -105,84 +52,62 @@
                                 :id="`default-${meta.type}-value`"
                                 rows="6"
                                 :placeholder="`Enter default value`"
-                                class="border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500 flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900"
+                                class="flex-1 block w-full max-w-lg min-w-0 rounded-md sm:text-sm dark:text-gray-400 dark:bg-gray-900"
+                                :class="[valid === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500']"
                                 v-if="['blob'].includes(meta.type)"
-                                v-model="meta.default.values[0].value"
+                                v-model="meta.realvalue.value"
                             ></textarea>
 
-                            <span class="text-sm" v-if="['files'].includes(meta.type)">This type has no default value</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['selection', 'multiple'].includes(meta.type)">
-
-                    <div class="block border-0 px-2 py-2 mb-2">
-
-                        <button
-                            type="button"
-                            class="
-                                inline-flex
-                                items-center
-                                px-4
-                                py-2
-                                rounded-md
-                                shadow-sm
-                                text-sm
-                                font-medium
-                                text-gray-700
-                                dark:text-gray-400
-                                bg-white
-                                dark:bg-gray-800
-                                border
-                                border-gray-300
-                                dark:border-gray-600
-                                hover:bg-gray-50
-                                dark:hover:bg-gray-700
-                                focus:outline-none
-                                focus:ring-2
-                                focus:ring-offset-gray-50
-                                focus:ring-sky-500
-                            "
-                            @click="useMeta.addDefaultValue(meta, langs)"
-                        >
-                            <PlusCircleIcon
-                                class="-ml-1 mr-2 h-5 w-5"
-                                aria-hidden="true"
-                            />
-                            Create
-                        </button>
-
-                    </div>
-
-                    <div
-                        v-for="value, index in meta.default.values"
-                        :key="index"
-                        class="block px-2 py-2"
-                    >
-
-                        <div class="my-2 sm:grid sm:grid-cols-2 sm:gap-4">
-                            <label
-                                :for="`default-${index}`"
+                            <input
+                                :id="`default-${meta.type}-value`"
+                                name="default"
+                                type="text"
+                                autocomplete="off"
+                                :placeholder="`Enter default value`"
                                 class="
                                     block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
+                                    max-w-lg
+                                    w-full
+                                    shadow-sm
+                                    sm:text-sm
+                                    rounded-md
+                                    text-gray-900
                                     dark:text-gray-400
-                                    mb-2
-                                    select-none
+                                    dark:bg-gray-900
                                 "
-                            >
-                                Option ({{ index }}) value
-                            </label>
+                                :class="[valid === false ? 'border-red-300 dark:border-red-700 focus:ring-red-500 focus:border-red-500': 'border-gray-300 dark:border-gray-700 focus:ring-sky-500 focus:border-sky-500']"
+                                v-if="['files'].includes(meta.type)"
+                                v-model="meta.realvalue.value"
+                            />
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="flex border p-0 border-gray-300 dark:border-gray-700 rounded-md shadow-sm group hover:ring-2 hover:ring-offset-gray-50 hover:ring-sky-500 dark:hover:ring-sky-700">
+
+
+
+                <div class="block py-2" v-if="['color'].includes(meta.type)">
+
+                    <div
+                        class="
+                            block
+                        "
+                    >
+                        <div class="mt-1 sm:mt-0 flex">
+
+                            <div class="flex
+                                border p-0
+                                border-gray-300
+                                dark:border-gray-700
+                                rounded-md shadow-sm
+                                focus-within:ring-2
+                                "
+                                :class="[valid === false ? 'border-red-300 dark:border-red-700 focus-within:ring-red-500 focus-within:border-red-500': 'border-gray-300 dark:border-gray-700 focus-within:ring-sky-500 focus-within:border-sky-500 dark:focus-within:ring-sky-700']"
+                            >
 
                                 <div class="flex-1">
                                     <input
-                                        :id="`default-${index}`"
+                                        :id="`default-${meta.type}-value`"
                                         name="option-value"
                                         type="text"
                                         autocomplete="off"
@@ -193,107 +118,139 @@
                                             dark:text-gray-400
                                             dark:bg-gray-900
                                             border-0
-                                            focus:ring-sky-500
-                                            focus:border-sky-500
+                                            focus:border-0
+                                            focus:ring-0
                                             rounded-l-md
                                         "
-                                        v-model="meta.default.values[index].value"
+                                        v-model="meta.realvalue.value"
                                     />
                                 </div>
 
-                                <div class="flex-none">
-                                    <button
-                                        type="button"
-                                        class="
-                                            inline-flex
-                                            items-center
-                                            px-4
-                                            py-2
-                                            rounded-r-md
-                                            text-sm
-                                            font-medium
-                                            focus:outline-none
-                                            focus:ring-0
-                                            focus:ring-offset-gray-50
-                                            focus:ring-red-500
-                                            text-white"
-
-                                        :class="index === 0 ? 'cursor-not-allowed text-gray-300 dark:text-gray-700 bg-white dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-800': 'bg-red-600 hover:bg-red-700 text-white'"
-                                        :disabled="index === 0"
-                                        @click="useMeta.removedDefaultValue(meta, index)"
-                                        >
-                                        <TrashIcon
-                                            class="-ml-1 mr-2 h-5 w-5"
-                                            aria-hidden="true"
-                                        />
-                                        Remove
-                                    </button>
+                                <div class="flex-none pt-1 pl-2">
+                                    <color-picker
+                                        v-model:pureColor="meta.realvalue.value"
+                                        v-model:gradientColor="defaultGradient"
+                                        pickerType="fk"
+                                        useType="pure"
+                                        shape="circle"
+                                    />
                                 </div>
                             </div>
-
-
                         </div>
+                    </div>
+                </div>
 
 
-                        <div
+
+
+                <div class="py-2 sm:divide-y sm:divide-gray-200 sm:dark:divide-gray-700" v-if="['selection', 'multiple'].includes(meta.type)">
+
+                    <div
+                        :class="[valid === false ? 'block p-2 rounded-md border border-red-300 dark:border-red-700': 'block p-2 ']"
+                        v-if="meta.widget === 'select'"
+                    >
+                        <select
+                            id="meta_target"
+                            name="meta_target"
                             class="
-                                sm:border-t sm:border-gray-200 sm:dark:border-gray-900
-                                sm:grid sm:grid-cols-2 sm:gap-4
-                                py-2
+                                block
+                                focus:ring-sky-500
+                                focus:border-sky-500
+                                w-full
+                                shadow-sm
+                                sm:max-w-lg
+                                sm:text-sm
+                                border-gray-300
+                                rounded-md
+                                text-gray-900
+                                dark:text-gray-400
+                                dark:bg-gray-900
+                                dark:border-gray-700
                             "
-                            v-for="name, nameKey in meta.default.values[index].names"
-                            :key="nameKey"
+                            v-model="meta.realvalue.value"
                         >
-                            <label
-                                :for="`default-name-${index}-${nameKey}`"
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
-                                    dark:text-gray-400
-                                    mb-2
-                                    select-none
-                                "
-                            >
-                                Option name ({{ nameKey }})
-                            </label>
+                            <option v-for="option, index in meta.default.values" :key="index" :value="option.value">{{ option.names[lang] }}</option>
+                        </select>
+
+                    </div>
 
 
-                            <div class="mt-1 sm:mt-0">
-                                <input
-                                    :id="`default-name-${index}-${nameKey}`"
-                                    :name="`default-name-${index}-${nameKey}`"
-                                    type="text"
-                                    autocomplete="off"
-                                    :placeholder="`Enter option ${nameKey} name`"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    "
-                                    v-model="meta.default.values[index].names[nameKey]"
+                    <div
+                        :class="[valid === false ? 'block p-2 rounded-md border border-red-300 dark:border-red-700': 'block p-2']"
+                        v-if="meta.widget === 'radio'"
+                    >
+
+                        <div v-for="option, index in meta.default.values" :key="index" class="flex items-start py-2">
+                            <div class="flex items-center">
+                                <input :id="`radio-option-${index}`" :aria-describedby="`radio-option-${index}`" :value="option.value" name="radio-option" type="radio" :checked="option.value == meta.realvalue.value"
+                                @change="meta.realvalue.value = option.value"
+                                class="focus:ring-sky-800/50
+                                    dark:focus:ring-sky-600/50
+                                    focus:outline-none
+                                    h-4
+                                    w-4
+                                    text-sky-600
+                                    dark:text-sky-800
+                                    border-gray-300
+                                    dark:border-gray-700
+                                    dark:bg-gray-700
+                                    checked:bg-sky-600
+                                    dark:checked:bg-sky-800"
                                 />
                             </div>
+                            <div class="ml-3 text-sm">
+                                <label
+                                    :for="`radio-option-${index}`"
+                                    class="font-medium text-gray-700 dark:text-gray-400 select-none">
+                                    {{ option.names[lang] }}
+                                </label>
+                            </div>
                         </div>
+
+                    </div>
+
+
+                    <div
+                        :class="[valid === false ? 'block p-2 rounded-md border border-red-300 dark:border-red-700': 'block p-2']"
+                        v-if="meta.widget === 'checkbox'"
+                    >
+
+                        <div v-for="option, index in meta.default.values" :key="index" class="flex items-start py-2">
+                            <div class="flex items-center">
+                                <input :id="`checkbox-option-${index}`" :aria-describedby="`checkbox-option-${index}`" :value="option.value" name="checkbox-option" type="checkbox" v-model="meta.realvalue.value"
+                                @change="log(meta.realvalue.value)"
+                                class="focus:ring-sky-800/50
+                                    dark:focus:ring-sky-600/50
+                                    focus:outline-none
+                                    h-4
+                                    w-4
+                                    text-sky-600
+                                    dark:text-sky-800
+                                    border-gray-300
+                                    dark:border-gray-700
+                                    dark:bg-gray-700
+                                    checked:bg-sky-600
+                                    dark:checked:bg-sky-800
+                                    rounded"
+                                />
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label
+                                    :for="`checkbox-option-${index}`"
+                                    class="font-medium text-gray-700 dark:text-gray-400 select-none">
+                                    {{ option.names[lang] }}
+                                </label>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
 
+            </div>
         </div>
 
-        <!--  v-if="['text', 'blob', 'file', 'files', 'bool'].includes(meta.type)" -->
 
     </div>
 
@@ -305,8 +262,8 @@ import { useRoute, useRouter } from 'vue-router';
 import useMeta from '../composables/use-meta';
 import utils from '../composables/utils';
 
-import { ColorPicker } from 'vue-color-kit';
-import 'vue-color-kit/dist/vue-color-kit.css';
+import { ColorPicker } from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
 
 import {
     PlusCircleIcon,
@@ -317,18 +274,18 @@ import {
 export default{
 
     props: {
-        langs: {
-            type: Object,
-            default: {},
+        lang: {
+            type: String,
+            default: '',
         },
         meta: {
             type: Object,
             default: {},
         },
-        values: {
-            type: Object,
-            default: {},
-        },
+        valid: {
+            type: Boolean,
+            default: true,
+        }
     },
 
     components: {
@@ -350,51 +307,42 @@ export default{
             this.$emit('reload-needed', allLangs);
         },
 
-        changeSingleColor(color) {
-
-            const { r, g, b, a } = color.rgba;
-            this.meta.default.values[0].value = `rgba(${r}, ${g}, ${b}, ${a})`;
-            console.log(this.meta.default.values[0]);
-        },
-
-
-        openSucker(isOpen) {
-            if (isOpen) {
-                // ... canvas be created
-                // this.suckerCanvas = canvas
-                // this.suckerArea = [x1, y1, x2, y2]
-            } else {
-                // this.suckerCanvas && this.suckerCanvas.remove
-            }
-        },
-
         lowerCase(e) {
             e.target.value = e.target.value.toLowerCase();
         },
+
+        log(m) {
+            console.log('Reported meta change', m);
+        }
     },
 
     async setup(props, { emit }) {
 
-        const metaTypes = useMeta().types();
+        //const metaTypes = useMeta().types();
 
         const route = useRoute();
         const meta = toRef(props, 'meta');
-        const langs = props.langs;
+        const valid = toRef(props, 'valid');
+        const lang = props.lang;
         const apiUrl = route.meta.apiUrl;
-        const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false
+        const darkTheme = JSON.parse(localStorage.getItem('darkTheme')) || false;
 
-        const colorPicker = {
-            color: metaTypes[meta.value.type].default,
-            suckerCanvas: null,
-            suckerArea: [],
-            isSucking: false,
+        console.log(`Meta attach recipe ${meta.value.tag}`, meta.value.default, meta.value.realvalue);
+
+        if (meta.type !== 'multiple') {
+
+            meta.value.realvalue.value = meta.value.realvalue.value !== null ? meta.value.realvalue.value: meta.value.default.values[0].value;
         }
 
+        // Stfu picker
+        const defaultGradient = ref("linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 100%)");
+
         return {
-            langs,
+            lang,
             meta,
+            valid,
             apiUrl,
-            colorPicker,
+            defaultGradient,
             darkTheme,
             useMeta: useMeta(),
        }

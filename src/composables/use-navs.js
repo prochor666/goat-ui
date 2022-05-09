@@ -9,6 +9,7 @@ let navs = reactive(new Set());
 let saving = reactive({
     status: false,
     result: {},
+    meta: {},
 });
 
 export const useNavs = function () {
@@ -64,12 +65,15 @@ export const useNavs = function () {
             if (state.data.input) {
 
                 saving.result.required = serverResponse().parse(state.data.input);
+                saving = utils().validateMeta(saving, state.data.input.metatags);
+
+                console.log('SAving', saving);
             }
 
             notify({
                 group: state.data[searchKey] > 0 ? "success" : "error",
                 title: state.data[searchKey] > 0 ? "Done" : "Error",
-                text: state.data[searchKey] > 0 ? "Nav saved successfully" : "Error saving nav data",
+                text: state.data[searchKey] > 0 ? "Nav saved successfully" : state.data.error || 'Error saving nav data',
             }, 5000);
 
             if (router && state.data[searchKey] > 0) {
@@ -150,6 +154,8 @@ export const useNavs = function () {
             name: '',
             order: 0,
             domains_id: domains_id,
+            metavalues: {},
+            lang: '',
             public: false,
         };
 
@@ -163,12 +169,10 @@ export const useNavs = function () {
         });
         let data = await r.data.data;
 
-        if (Object.keys(data).length > 1 && data.id > 0) {
+        if (typeof data === 'object' && data.length > 0 && data[0].id > 0) {
 
-            nav = data;
+            nav = data[0];
             nav.public = nav.public == 1 ? true : false;
-
-            console.log('Found nav', nav);
         }
 
         return nav;

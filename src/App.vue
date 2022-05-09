@@ -62,6 +62,20 @@ html.dark * {
     border: 2px solid var(--scrollbarBG);
 }
 
+/*
+.dark * .vc-colorpicker {
+
+    background-color: rgb(0,0,0) !important;
+    border: rgb(33, 33, 33) solid 1px;
+}
+
+.dark .vc-colorpicker .vc-fk-colorPicker,
+.dark .vc-colorpicker .vc-chrome-colorPicker {
+
+    background-color: rgb(0,0,0);
+}
+*/
+
 .v3dp__datepicker {
     --vdp-bg-color: #ffffff;
     --vdp-text-color: #000000;
