@@ -25,6 +25,7 @@ import SiteMetaDetail from './vue-components/SiteMetaDetail.vue';
 import Settings from './vue-components/Settings.vue';
 import apiEndpoint from './composables/api-endpoint';
 import autoLogin from './composables/auto-login';
+
 import './index.css';
 
 const routes = [

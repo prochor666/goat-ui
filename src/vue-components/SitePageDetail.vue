@@ -54,7 +54,7 @@
                 <div class="items-center text-sm text-gray-500 flex-1 grow sm:justify-items-end">
 
                     <SwitchGroup as="div" class="flex items-center sm:justify-end">
-                        <Switch v-model="page.public" :class="[page.public ? 'bg-emerald-600' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
+                        <Switch v-model="page.public" :class="[page.public ? 'bg-emerald-600 focus:ring-emerald-400' : 'bg-gray-200 dark:bg-gray-600 focus:ring-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2']">
                             <span aria-hidden="true" :class="[page.public ? 'translate-x-5 bg-emerald-200 dark:bg-emerald-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
                         </Switch>
 
@@ -238,7 +238,7 @@
                                     "
                                     v-model="page.description"
                                     :max="maxDescriptionLength"
-                                    @keydown="LimitChars($event)"
+                                    @keydown="limitChars($event)"
                                 />
                                 <p :class="[maxDescriptionLength - page.description.length === 0 ? 'text-red-500 dark:text-red-600': 'text-gray-500', 'text-sm mt-4']">
                                     {{ maxDescriptionLength - page.description.length }} of {{ maxDescriptionLength }} characters left
@@ -673,7 +673,7 @@ export default {
         lowerCase(e) {
             e.target.value = e.target.value.toLowerCase();
         },
-        LimitChars(e)
+        limitChars(e)
         {
             let value = e.target.value,
                 max = parseInt(e.target.getAttribute('max'));

@@ -310,7 +310,7 @@ export default {
         let navs = await navsLoad();
         navs = assignNavsOrderID(navs);
 
-        console.log('Found navs', navs);
+        //console.log('Found navs', navs);
 
         const breadCrumbs = [{
             name: 'Sites',

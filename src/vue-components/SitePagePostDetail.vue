@@ -48,18 +48,18 @@
                     <div class="mt-4 sm:mt-2 items-center text-sm text-gray-500 flex-1 grow sm:justify-items-end">
 
                         <SwitchGroup as="div" class="flex items-center sm:justify-end">
-                            <Switch v-model="post.public" :class="[post.public ? 'bg-emerald-600' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
+                            <Switch v-model="post.public" :class="[post.public ? 'bg-emerald-600 focus:ring-emerald-400' : 'bg-gray-200 dark:bg-gray-600 focus:ring-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2']">
                                 <span aria-hidden="true" :class="[post.public ? 'translate-x-5 bg-emerald-200 dark:bg-emerald-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
                             </Switch>
 
                             <span class="w-32 flex flex-col ml-4" v-if="post.public">
                                 <SwitchLabel as="span" class="text-sm font-medium text-emerald-700 select-none" passive>Enabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is active.</SwitchDescription>
+                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Post is active.</SwitchDescription>
                             </span>
 
                             <span class="w-32 flex flex-col ml-4" v-if="!post.public">
                                 <SwitchLabel as="span" class="text-sm font-medium text-red-500 select-none" passive>Disabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Page is not active.</SwitchDescription>
+                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Post is not active.</SwitchDescription>
                             </span>
                         </SwitchGroup>
                     </div>
@@ -128,7 +128,6 @@
                                     placeholder="Enter post annotation"
                                     class="
                                         block
-                                        max-w-lg
                                         w-full
                                         shadow-sm
                                         focus:ring-sky-500
@@ -142,6 +141,7 @@
                                     "
                                     v-model="post.title"
                                 />
+
                             </div>
                         </div>
 
@@ -178,7 +178,6 @@
                                     rows="5"
                                     class="
                                         block
-                                        max-w-lg
                                         w-full
                                         shadow-sm
                                         focus:ring-sky-500
@@ -224,96 +223,21 @@
 
                                 <!-- <ContentEditor v-model="post.content" /> -->
 
-                                <Editor v-model="post.content" class="
+                                <Editor :htmlContent="post.content" class="
                                         block
-                                        p-4
-                                        max-w-lg
                                         w-full
                                         shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
+                                        text-gray-800
                                         border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    " />
-                                <!-- <textarea
-                                    id="content"
-                                    name="content"
-                                    placeholder="Enter post HTML"
-                                    rows="5"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
+                                        dark:text-gray-200
                                         dark:bg-gray-900
                                         dark:border-gray-700
                                     "
-                                    v-model="post.content"
-                                /> -->
-                            </div>
-                        </div>
-
-
-
-                       <div
-                            class="
-                                sm:grid sm:grid-cols-3
-                                sm:gap-4
-                                sm:items-start
-                                sm:border-t sm:border-gray-200  sm:dark:border-gray-900
-                                sm:pt-5
-                            "
-                        >
-                            <label
-                                for="slug"
-                                class="
-                                    block
-                                    text-sm
-                                    font-medium
-                                    text-gray-700
-                                    dark:text-gray-400
-                                    sm:mt-px
-                                    sm:pt-2
-                                "
-                            >
-                                Slug
-                            </label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input
-                                    id="slug"
-                                    name="slug"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Enter page slug"
-                                    class="
-                                        block
-                                        max-w-lg
-                                        w-full
-                                        shadow-sm
-                                        focus:ring-sky-500
-                                        focus:border-sky-500
-                                        sm:text-sm
-                                        border-gray-300
-                                        rounded-md
-                                        dark:text-gray-400
-                                        dark:bg-gray-900
-                                        dark:border-gray-700
-                                    "
-                                    v-model="post.slug"
-                                    @input="lowerCase($event)"
+                                    @updated="post.content = $event"
                                 />
                             </div>
                         </div>
+
 
                     </div>
 
@@ -436,7 +360,7 @@
                             type="button"
                             :class="[saving.status === true ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
                             :disabled="saving.status === true"
-                            @click="usePages.save(saving, page, router)"
+                            @click="usePosts.save(saving, post, router)"
                         >
                             <CheckIcon v-if="!saving.status"
                                 class="mr-2 h-5 w-5 text-white"
@@ -462,7 +386,6 @@ import MainMenu from './MainMenu.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
 import Editor from './Editor.vue';
 import PageTitle from './PageTitle.vue';
-//import ContentEditor from './ContentEditor.vue';
 
 import usePages from '../composables/use-pages';
 import useSites from '../composables/use-sites';
@@ -517,9 +440,11 @@ export default {
 
     methods: {
         lowerCase(e) {
+
             e.target.value = e.target.value.toLowerCase();
         },
-        LimitChars(e)
+
+        limitChars(e)
         {
             let value = e.target.value,
                 max = parseInt(e.target.getAttribute('max'));
@@ -600,11 +525,13 @@ export default {
             }
         }];
 
+        console.log(post);
+
         return {
             domains_id,
             pages_id,
             site,
-            post,
+            post: ref(post),
             router,
             saving,
             pageTitle,

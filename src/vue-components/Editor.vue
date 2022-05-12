@@ -1,43 +1,81 @@
 <template>
-    <editor-content :editor="editor" />
+    <div>
+        <QuillEditor theme="snow" :toolbar="toolbar" contentType="html" :content="htmlContent" ref="internalEditor" @update:content="setEditorContent($event)" />
+    </div>
 </template>
 
 <script>
-import { useEditor, Editor, EditorContent } from '@tiptap/vue-3';
-import StarterKit from '@tiptap/starter-kit';
+import { onMounted, toRef, ref } from "vue";
+import { QuillEditor } from '@vueup/vue-quill';
+//import BlotFormatter from 'quill-blot-formatter';
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
     components: {
-        EditorContent,
+        QuillEditor,
     },
 
     props: {
-        modelValue: {
+        htmlContent: {
             type: String,
-            default: '',
+            default: '<p>Default text</p>',
         },
+        toolbar: {
+            type: Object,
+            default: [
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['blockquote'],
+
+                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                [{ 'align': [] }],
+
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'direction': 'rtl' }],                         // text direction
+
+                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+
+                ['link' , 'image', 'video'],
+
+                ['clean']                                         // remove formatting button
+            ],
+        }
     },
 
-    watch: {
-        modelValue(value) {
-        // HTML
-        const isSame = this.editor.getHTML() === value
+    methods: {
 
-        if (isSame) {
-            return
+        setEditorContent(content) {
+            //console.log('Update', this.internalEditor, this.htmlContent, content);
+            this.$emit('updated', content);
         }
 
-        this.editor.commands.setContent(value, false)
-        },
     },
 
-    setup(props) {
-        const editor = useEditor({
-            content: props.modeValue,
-            extensions: [StarterKit],
-        });
 
-        return { editor };
+   emits: [
+        'updated',
+    ],
+
+    setup(props, { emit }) {
+        const internalEditor= ref(null);
+        const htmlContent = props.htmlContent;
+        const toolbar = props.toolbar;
+
+        const modules = {
+            /* name: 'blotFormatter',
+            module: BlotFormatter,
+            options: {} */
+        }
+
+        console.log('Setting initial content', htmlContent);
+
+        return {
+            htmlContent,
+            toolbar,
+            modules,
+            internalEditor,
+        };
     },
 };
 </script>

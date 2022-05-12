@@ -48,18 +48,18 @@
                     <div class="mt-4 sm:mt-2 items-center text-sm text-gray-500 flex-1 grow sm:justify-items-end">
 
                         <SwitchGroup as="div" class="flex items-center sm:justify-end">
-                            <Switch v-model="nav.public" :class="[nav.public ? 'bg-emerald-600' : 'bg-gray-200 dark:bg-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-green-400']">
+                            <Switch v-model="nav.public" :class="[nav.public ? 'bg-emerald-600  focus:ring-emerald-400' : 'bg-gray-200 dark:bg-gray-600 focus:ring-gray-600', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2']">
                                 <span aria-hidden="true" :class="[nav.public ? 'translate-x-5 bg-emerald-200 dark:bg-emerald-200' : 'translate-x-0 bg-gray-100 dark:bg-gray-400', 'pointer-events-none inline-block h-5 w-5 rounded-full shadow transform ring-0 transition ease-in-out duration-200']" />
                             </Switch>
 
                             <span class="w-32 flex flex-col ml-4" v-if="nav.public">
                                 <SwitchLabel as="span" class="text-sm font-medium text-emerald-700 select-none" passive>Enabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Site is active.</SwitchDescription>
+                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Nav is active.</SwitchDescription>
                             </span>
 
                             <span class="w-32 flex flex-col ml-4" v-if="!nav.public">
                                 <SwitchLabel as="span" class="text-sm font-medium text-red-500 select-none" passive>Disabled</SwitchLabel>
-                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Site is not active.</SwitchDescription>
+                                <SwitchDescription as="span" class="text-sm text-gray-500 select-none">Nav is not active.</SwitchDescription>
                             </span>
                         </SwitchGroup>
                     </div>

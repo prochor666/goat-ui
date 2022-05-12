@@ -76,7 +76,7 @@
                             focus:ring-offset-gray-50
                             focus:ring-sky-500
                         "
-                        @click="router.push(`/sites/${site.id}/pages/${page.id}/posts/0`)"
+                        @click="router.push(`/sites/${site.id}/${lang}/pages/${page.id}/posts/0`)"
                     >
                         <PlusCircleIcon
                             class="-ml-1 mr-2 h-5 w-5"
@@ -107,8 +107,10 @@
                 <li v-for="post in Pagination.options.result" :key="post.id">
                     <router-link
                         :to="{
-                            name: 'posts',
-                            params: { id: post.id }
+                            name: 'post-detail',
+                            params: {
+                                postid: post.id
+                            }
                         }"
                         class="group block hover:bg-gray-50 dark:hover:bg-gray-900"
                     >
@@ -140,7 +142,7 @@
                                                 truncate
                                             "
                                         >
-                                            {{ post.name }}
+                                            {{ post.title }}
                                         </p>
                                         <p
                                             class="
@@ -274,6 +276,8 @@ export default {
         const domains_id = parseInt(route.params.id || 0);
         const id = parseInt(route.params.pageid || 0);
 
+        const lang = route.params.lang || '';
+
         const pageTabs = [{
             name: 'Page edit',
             current: false,
@@ -311,7 +315,7 @@ export default {
         Pagination.options.to = 'posts';
 
         const postsLoad = async function() {
-            const r = await axios.get(`${apiUrl}/api/posts/?_wfilter[]=pages_id|${id}&_worder[]=publish_date|DESC`, {
+            const r = await axios.get(`${apiUrl}/api/posts/?_wfilter[]=pages_id|${id}&_worder[]=date_publish|DESC`, {
                 headers: {
                     Authorization: localStorage.getItem('session_id'),
                     'Content-Type': 'application/json'
@@ -356,6 +360,7 @@ export default {
             page,
             posts,
             router,
+            lang,
             Pagination,
             pageTabs,
             breadCrumbs,

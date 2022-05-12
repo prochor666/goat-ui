@@ -13,12 +13,13 @@ export const usePosts = function () {
     const save = async function (saving, post, router) {
 
         try {
+            console.log(post);
 
             const apiUrl = localStorage.getItem("apiUrl") || '';
             let modPost = JSON.parse(JSON.stringify(post));
 
-            let requestMethod = 'posts';
-            let requestPath = `pages`;
+            let requestMethod = 'post';
+            let requestPath = `posts`;
             let searchKey = 'created';
 
             modPost.public = modPost.public ? 1 : 0;
@@ -78,18 +79,18 @@ export const usePosts = function () {
 
     const load = async function (id, pages_id) {
 
-        let post = {
+        let post = reactive({
             id: 0,
             title: '',
             annotation: '',
-            content: '',
+            content: '', //'<h1>Get started with Tailwind CSS</h1>',
             slug: '',
             image: '',
             order: 0,
-            pages_id: 0,
+            pages_id: pages_id,
             public: false,
             date_publish: '',
-        };
+        });
 
         const apiUrl = localStorage.getItem("apiUrl") || '';
 
