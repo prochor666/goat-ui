@@ -17,6 +17,7 @@
         "notiwind": "^1.2.5",
         "object-hash": "^2.2.0",
         "qs": "^6.10.3",
+        "quill-better-table": "^1.2.10",
         "quill-blot-formatter": "^1.0.5",
         "slugify": "^1.6.5",
         "vue": "^3.2.33",

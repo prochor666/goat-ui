@@ -1,13 +1,14 @@
 <template>
     <div>
-        <QuillEditor theme="snow" :toolbar="toolbar" contentType="html" :content="htmlContent" ref="internalEditor" @update:content="setEditorContent($event)" />
+        <QuillEditor theme="snow" :toolbar="toolbar" contentType="html" :content="htmlContent" :modules="modules" ref="internalEditor" @update:content="setEditorContent($event)" />
     </div>
 </template>
 
 <script>
 import { onMounted, toRef, ref } from "vue";
 import { QuillEditor } from '@vueup/vue-quill';
-//import BlotFormatter from 'quill-blot-formatter';
+import BlotFormatter from 'quill-blot-formatter';
+import QuillBetterTable from 'quill-better-table';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 export default {
@@ -38,7 +39,7 @@ export default {
 
                 ['link' , 'image', 'video'],
 
-                ['clean']                                         // remove formatting button
+                ['clean'],                                         // remove formatting button
             ],
         }
     },
@@ -62,11 +63,27 @@ export default {
         const htmlContent = props.htmlContent;
         const toolbar = props.toolbar;
 
-        const modules = {
-            /* name: 'blotFormatter',
+        const modules = [{
+            name: 'blotFormatter',
             module: BlotFormatter,
-            options: {} */
-        }
+            options: {}
+        }/* ,{
+            name: 'QuillBetterTable',
+            module: QuillBetterTable,
+            options: {
+                operationMenu: {
+                    items: {
+                        unmergeCells: {
+                            text: 'Another unmerge cells name'
+                        }
+                    },
+                    color: {
+                        colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors in operationMenu
+                        text: 'Background Colors'  // subtitle
+                    }
+                }
+            }
+        } */,];
 
         console.log('Setting initial content', htmlContent);
 
@@ -79,3 +96,5 @@ export default {
     },
 };
 </script>
+
+
