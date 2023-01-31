@@ -19,7 +19,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import {
     ExclamationIcon,
     CheckCircleIcon,
@@ -27,96 +27,78 @@ import {
     XCircleIcon,
 } from '@heroicons/vue/solid';
 
-export default {
-    components: {
-        ExclamationIcon,
-        CheckCircleIcon,
-        InformationCircleIcon,
-        XCircleIcon,
+const props = defineProps({
+    title: {
+        type: String,
+        default: ''
     },
-
-    props: {
-        title: {
-            type: String,
-            default: ''
-        },
-        text: {
-            type: String,
-            default: ''
-        },
-        type: {
-            type: String,
-            default: 'info'
-        }
+    text: {
+        type: String,
+        default: ''
     },
+    type: {
+        type: String,
+        default: 'info'
+    },
+});
 
-    setup: function(props) {
 
-        const type = props.type;
-        const title = props.title;
-        const text = props.text;
+const type = props.type;
+const title = props.title;
+const text = props.text;
 
-        const selectTheme = function(type) {
+const selectTheme = function(type) {
 
-            let theme = {};
+    let theme = {};
 
-            switch(type) {
+    switch(type) {
 
-                case 'success':
+        case 'success':
 
-                    theme = {
-                        icon: CheckCircleIcon,
-                        iconColor: 'text-lime-600 dark:text-lime-300',
-                        titleColor: 'text-lime-800 dark:text-lime-100',
-                        textColor: 'text-lime-700 dark:text-lime-200',
-                        bg: 'bg-lime-100 dark:bg-lime-900',
-                    };
-                    break;
+            theme = {
+                icon: CheckCircleIcon,
+                iconColor: 'text-lime-600 dark:text-lime-300',
+                titleColor: 'text-lime-800 dark:text-lime-100',
+                textColor: 'text-lime-700 dark:text-lime-200',
+                bg: 'bg-lime-100 dark:bg-lime-900',
+            };
+            break;
 
-                case 'warning':
+        case 'warning':
 
-                    theme = {
-                        icon: ExclamationIcon,
-                        iconColor: 'text-yellow-600 dark:text-yellow-300',
-                        titleColor: 'text-yellow-800 dark:text-yellow-100',
-                        textColor: 'text-yellow-700 dark:text-yellow-200',
-                        bg: 'bg-yellow-100 dark:bg-yellow-900',
-                    };
-                    break;
+            theme = {
+                icon: ExclamationIcon,
+                iconColor: 'text-yellow-600 dark:text-yellow-300',
+                titleColor: 'text-yellow-800 dark:text-yellow-100',
+                textColor: 'text-yellow-700 dark:text-yellow-200',
+                bg: 'bg-yellow-100 dark:bg-yellow-900',
+            };
+            break;
 
-                case 'danger':
+        case 'danger':
 
-                    theme = {
-                        icon: XCircleIcon,
-                        iconColor: 'text-red-600 dark:text-red-300',
-                        titleColor: 'text-red-800 dark:text-red-100',
-                        textColor: 'text-red-700 dark:text-red-200',
-                        bg: 'bg-red-100 dark:bg-red-900',
-                    };
-                    break;
+            theme = {
+                icon: XCircleIcon,
+                iconColor: 'text-red-600 dark:text-red-300',
+                titleColor: 'text-red-800 dark:text-red-100',
+                textColor: 'text-red-700 dark:text-red-200',
+                bg: 'bg-red-100 dark:bg-red-900',
+            };
+            break;
 
-                default:
+        default:
 
-                    theme = {
-                        icon: InformationCircleIcon,
-                        iconColor: 'text-sky-600 dark:text-sky-300',
-                        titleColor: 'text-sky-800 dark:text-sky-100',
-                        textColor: 'text-sky-700 dark:text-sky-200',
-                        bg: 'bg-sky-100 dark:bg-sky-900',
-                    }
+            theme = {
+                icon: InformationCircleIcon,
+                iconColor: 'text-sky-600 dark:text-sky-300',
+                titleColor: 'text-sky-800 dark:text-sky-100',
+                textColor: 'text-sky-700 dark:text-sky-200',
+                bg: 'bg-sky-100 dark:bg-sky-900',
             }
-
-            return theme;
-        };
-
-        const theme = selectTheme(type);
-
-        return {
-            title,
-            text,
-            type,
-            theme,
-        }
     }
+
+    return theme;
 };
+
+const theme = selectTheme(type);
 </script>

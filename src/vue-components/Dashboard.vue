@@ -34,47 +34,22 @@
 
 </template>
 
-<script>
-import { ref, reactive } from 'vue';
+<script setup>
 import { useRoute, useRouter } from 'vue-router';
 import MainMenu from './MainMenu.vue';
 import Breadcrumbs from './Breadcrumbs.vue';
 import PageTitle from './PageTitle.vue';
 
-import {
-    ArrowSmDownIcon,
-    ArrowSmUpIcon,
-    PaperClipIcon,
-} from '@heroicons/vue/solid';
+const route = useRoute();
+const router = useRouter();
+const logged = route.meta.logged;
+const apiUrl = route.meta.apiUrl;
+const pwd = localStorage.getItem("pwd") || '';
 
-export default {
-    components: {
-        MainMenu,
-        PageTitle,
-        Breadcrumbs,
-        ArrowSmDownIcon,
-        ArrowSmUpIcon,
-        PaperClipIcon,
-    },
-    async setup() {
-        const route = useRoute();
-        const router = useRouter();
-        const logged = route.meta.logged;
-        const apiUrl = route.meta.apiUrl;
-        const pwd = localStorage.getItem("pwd") || '';
+const breadCrumbs = [];
 
-        const breadCrumbs = [];
-
-        const log = function(a) {
-            console.log(a);
-        };
-
-
-        return {
-            logged,
-            breadCrumbs,
-        };
-    },
+const log = function(a) {
+    console.log(a);
 };
 </script>
 

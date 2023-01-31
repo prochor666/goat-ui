@@ -1,19 +1,41 @@
 <template>
     <div>
-        <QuillEditor theme="snow" :toolbar="toolbar" contentType="html" :content="htmlContent" :modules="modules" ref="internalEditor" @update:content="setEditorContent($event)" />
+        --- editor area ---
     </div>
 </template>
 
-<script>
+<script setup>
 import { onMounted, toRef, ref } from "vue";
-import { QuillEditor } from '@vueup/vue-quill';
-import BlotFormatter from 'quill-blot-formatter';
-import QuillBetterTable from 'quill-better-table';
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
+const props = defineProps({
+    htmlContent: {
+        type: String,
+        default: '<p>Default text</p>',
+    },
+    toolbar: {
+        type: Object,
+        default: [],
+    },
+});
+
+const setEditorContent = (content) => {
+    //console.log('Update', this.internalEditor, this.htmlContent, content);
+    this.$emit('updated', content);
+};
+
+const emit = defineEmits(['updated']);
+
+
+const internalEditor= ref(null);
+const htmlContent = props.htmlContent;
+const toolbar = props.toolbar;
+
+console.log('Setting initial content', htmlContent);
+
+/*
 export default {
     components: {
-        QuillEditor,
+
     },
 
     props: {
@@ -23,78 +45,26 @@ export default {
         },
         toolbar: {
             type: Object,
-            default: [
-                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                ['blockquote'],
-
-                [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-                [{ 'align': [] }],
-
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-                [{ 'direction': 'rtl' }],                         // text direction
-
-                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-
-                ['link' , 'image', 'video'],
-
-                ['clean'],                                         // remove formatting button
-            ],
+            default: [],
         }
     },
 
-    methods: {
-
-        setEditorContent(content) {
-            //console.log('Update', this.internalEditor, this.htmlContent, content);
-            this.$emit('updated', content);
-        }
-
-    },
-
-
-   emits: [
-        'updated',
-    ],
 
     setup(props, { emit }) {
         const internalEditor= ref(null);
         const htmlContent = props.htmlContent;
         const toolbar = props.toolbar;
 
-        const modules = [{
-            name: 'blotFormatter',
-            module: BlotFormatter,
-            options: {}
-        }/* ,{
-            name: 'QuillBetterTable',
-            module: QuillBetterTable,
-            options: {
-                operationMenu: {
-                    items: {
-                        unmergeCells: {
-                            text: 'Another unmerge cells name'
-                        }
-                    },
-                    color: {
-                        colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors in operationMenu
-                        text: 'Background Colors'  // subtitle
-                    }
-                }
-            }
-        } */,];
-
         console.log('Setting initial content', htmlContent);
 
         return {
             htmlContent,
             toolbar,
-            modules,
             internalEditor,
         };
     },
 };
+*/
 </script>
 
 

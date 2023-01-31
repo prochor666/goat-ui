@@ -269,6 +269,9 @@ export default {
         const lang = route.params.lang || '';
         const site = await useSites().load(domains_id);
 
+        console.log('Route dump', route.params);
+
+
         if (site.id === 0) {
 
             document.location = '/sites';
@@ -310,7 +313,7 @@ export default {
         let navs = await navsLoad();
         navs = assignNavsOrderID(navs);
 
-        //console.log('Found navs', navs);
+        console.log('Found navs', navs);
 
         const breadCrumbs = [{
             name: 'Sites',

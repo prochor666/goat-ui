@@ -37,7 +37,7 @@
 
 </template>
 
-<script>
+<script setup>
 import { useRouter } from 'vue-router';
 
 import {
@@ -45,27 +45,13 @@ import {
     ChevronRightIcon,
 } from '@heroicons/vue/solid';
 
-export default {
-    props: {
-        items: {
-            type: Object,
-            default: [], // Accepts valid route objects
-        },
+const props = defineProps({
+    items: {
+        type: Object,
+        default: [], // Accepts valid route objects
     },
+});
 
-    components: {
-        HomeIcon,
-        ChevronRightIcon,
-    },
-    setup(props) {
-        const router = useRouter();
-
-        let items = props.items;
-
-        return {
-            items,
-            router,
-        };
-    },
-};
+const router = useRouter();
+let items = props.items;
 </script>

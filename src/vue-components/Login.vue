@@ -193,7 +193,7 @@
                         type="button"
                         :class="[saving.status === true || login.length <1 || password.length < 1 ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed': 'bg-sky-600 hover:bg-sky-700 text-white', 'ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500']"
                         :disabled="saving.status === true || login.length < 1 || password.length < 1"
-                        @click="useLogin.login(saving, login, password, router)"
+                        @click="useLogin().login(saving, login, password, router)"
                     >
                         <LockOpenIcon v-if="!saving.status"
                             class="-ml-1 mr-2 h-5 w-5"
@@ -214,7 +214,7 @@
     </main>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
@@ -233,46 +233,24 @@ import {
     RefreshIcon,
 } from '@heroicons/vue/outline';
 
-export default {
-    components: {
-        MainMenu,
-        PageTitle,
-        KeyIcon,
-        LockOpenIcon,
-        RefreshIcon,
-        UserIcon,
-    },
-    setup() {
+const route = useRoute();
+const router = useRouter();
 
-        const route = useRoute();
-        const router = useRouter();
+const login = ref('');
+const password = ref('');
 
-        const login = ref('');
-        const password = ref('');
-
-        const saving = ref({
-            status: false,
-            result: {
-                required: {
-                    username: true,
-                    password: true,
-                }
-            },
-        })
-
-        if (route.meta.user.logged === true) {
-
-            //console.log(route.meta.user);
-            router.push('/');
+const saving = ref({
+    status: false,
+    result: {
+        required: {
+            username: true,
+            password: true,
         }
-
-        return {
-            login,
-            saving,
-            password,
-            router,
-            useLogin: useLogin(),
-        };
     },
-};
+})
+
+if (route.meta.user.logged === true) {
+    //console.log(route.meta.user);
+    router.push('/');
+}
 </script>

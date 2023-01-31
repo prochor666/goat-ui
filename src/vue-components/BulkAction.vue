@@ -90,7 +90,7 @@
 
 </template>
 
-<script>
+<script setup>
 import { ref, watch } from "vue";
 
 //import useFiles from '../composables/use-files';
@@ -102,49 +102,27 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
+
 import {
     ChevronRightIcon,
     ChevronDoubleRightIcon,
     XIcon,
 } from '@heroicons/vue/outline';
 
-export default {
-
-    props: {
-        active: {
-            type: Boolean,
-            default: true
-        },
+const props = defineProps({
+    active: {
+        type: Boolean,
+        default: true
     },
+});
 
-    components: {
-        Dialog,
-        DialogOverlay,
-        DialogTitle,
-        TransitionChild,
-        TransitionRoot,
-        ChevronRightIcon,
-        ChevronDoubleRightIcon,
-        XIcon,
-    },
+let active = ref(props.active);
 
-    async setup(props) {
+console.log('Hey');
 
-        let active = ref(props.active);
-
-        console.log('Hey');
-
-        watch(active, async (value) => {
-
-           // console.log('Hey change', value);
-        },{
-            deep: true
-        });
-
-        return {
-            active,
-            //useFiles: useFiles(),
-        }
-    }
-};
+watch(active, async (value) => {
+   // console.log('Hey change', value);
+},{
+    deep: true
+});
 </script>

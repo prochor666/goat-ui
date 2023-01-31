@@ -70,7 +70,7 @@
 
 </template>
 
-<script>
+<script setup>
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import utils from '../composables/utils';
@@ -82,89 +82,53 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
+
 import {
     TranslateIcon,
     XIcon,
 } from '@heroicons/vue/outline';
 
-export default{
-
-    props: {
-        langs: {
-            type: Object,
-            default: [],
-        },
-        active: {
-            type: Boolean,
-            default: false,
-        },
+const props = defineProps({
+    langs: {
+        type: Object,
+        default: [],
     },
-
-    components: {
-        Dialog,
-        DialogOverlay,
-        DialogTitle,
-        TransitionChild,
-        TransitionRoot,
-        TranslateIcon,
-        XIcon,
+    active: {
+        type: Boolean,
+        default: false,
     },
+});
 
-    emits: {
+const route = useRoute();
+const active = ref(props.active);
+const langs = reactive(props.langs);
+const _all = await utils().loadHelper('langs');
+const allLangs = _all.langs;
+const apiUrl = route.meta.apiUrl;
 
-        'reload-needed'(allLangs) {
+const emit = defineEmits({'reload-needed': (allLangs) => {
+    return allLangs;
+}});
 
-            //console.log(e);
+const update = (e, allLangs) => {
+    this.$emit('reload-needed', allLangs);
+};
 
-            return allLangs;
+const isSelected = function(_langs, _lang) {
+
+    for (let i in _langs) {
+        if (_lang.alpha2 === _langs[i].alpha2) {
+            return true;
         }
-    },
+    }
 
-    methods: {
+    return false;
+};
 
-        update(e, allLangs) {
+for (let i in allLangs) {
 
-            this.$emit('reload-needed', allLangs);
-        }
-    },
-
-    async setup(props, { emit }) {
-
-        const route = useRoute();
-        const active = ref(props.active);
-        const langs = reactive(props.langs);
-        const _all = await utils().loadHelper('langs');
-        const allLangs = _all.langs;
-        const apiUrl = route.meta.apiUrl;
-
-        const isSelected = function(_langs, _lang) {
-
-            for (let i in _langs) {
-
-                if (_lang.alpha2 === _langs[i].alpha2) {
-
-                    return true;
-                }
-            }
-
-            return false;
-        };
-
-        for (let i in allLangs) {
-
-            if (isSelected(langs, allLangs[i])) {
-
-                allLangs[i].selected = true;
-            }
-        }
-
-
-        return {
-            langs,
-            allLangs,
-            active,
-            apiUrl,
-       }
+    if (isSelected(langs, allLangs[i])) {
+        allLangs[i].selected = true;
     }
 }
 </script>

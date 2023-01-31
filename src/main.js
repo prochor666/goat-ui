@@ -63,6 +63,10 @@ router.beforeEach(async (to, from) => {
     to.meta.user = await autoLogin(apiUrl);
     to.meta.apiUrl = apiUrl;
 
+    console.log(`Try navigate to ${to.path} with role ${to.meta.user.profile.role}`);
+
+    console.log(to.meta.requiredRoles);
+
     if (to.meta.requiredRoles.includes(to.meta.user.profile.role)) {
 
         console.log(`I am ${to.meta.user.profile.role} at ${to.path} , it's allowed, required`, to.meta.requiredRoles);

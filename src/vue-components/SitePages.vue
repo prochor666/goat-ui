@@ -297,6 +297,8 @@ export default {
 
         const site = await useSites().load(domains_id);
 
+        console.log('Route dump', route.params);
+
         if (site.id === 0) {
 
             document.location = '/sites';

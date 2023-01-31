@@ -162,7 +162,7 @@
 
 </template>
 
-<script>
+<script setup>
 import { ref, watch } from "vue";
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
@@ -186,183 +186,135 @@ import {
     XIcon,
 } from '@heroicons/vue/outline';
 
-export default{
-
-    props: {
-        active: {
-            type: Boolean,
-            default: false
-        },
-        file: {
-            type: Object,
-            default: {
-                basename: '',
-                rel: '',
-                http: '',
-                id: 0,
-                domains_id: 0,
-                mime: '',
-            }
+const props = defineProps({
+    active: {
+        type: Boolean,
+        default: false
+    },
+    file: {
+        type: Object,
+        default: {
+            basename: '',
+            rel: '',
+            http: '',
+            id: 0,
+            domains_id: 0,
+            mime: '',
         }
     },
+});
 
-    components: {
-        Dialog,
-        DialogOverlay,
-        DialogTitle,
-        TransitionChild,
-        TransitionRoot,
-        DocumentTextIcon,
-        MusicNoteIcon,
-        PencilAltIcon,
-        PhotographIcon,
-        ShieldExclamationIcon,
-        TrashIcon,
-        VideoCameraIcon,
-        XIcon,
-    },
+const reset = (path) => {
+    this.$emit('reload-needed', path);
+};
 
-    emits: {
+const emit = defineEmits({'reload-needed': () => {
+    return true;
+}});
 
-        'reload-needed' () {
+const route = useRoute();
+const router = useRouter();
+const active = ref(props.active);
+const file = ref(props.file);
+const apiUrl = route.meta.apiUrl;
 
-            return true;
+const deleteFile = async function() {
+
+    const r = await axios.delete(`${apiUrl}/api/files/${file.value.id}`, {
+        headers: {
+            Authorization: localStorage.getItem('session_id'),
+            'Content-Type': 'application/json'
         }
-    },
+    });
+    let data = await r.data.data;
 
-    methods: {
+    console.log('Delete', r);
 
-        reset(path) {
+    active.value = false;
 
-            this.$emit('reload-needed', path);
-        }
-    },
+    emit('reload-needed');
 
-    setup(props, { emit }) {
+    if (typeof data === 'object' && Object.keys(data).length > 0 && data.status && data.deleted && parseInt(data.deleted) > 0) {
 
-        const route = useRoute();
-        const router = useRouter();
-        const active = ref(props.active);
-        const file = ref(props.file);
-        const apiUrl = route.meta.apiUrl;
+        notify({
+            group: "success",
+            title: "Done",
+            text: `File ${file.value.basename} deleted`,
+        }, 5000);
+    } else {
 
-        const deleteFile = async function() {
-
-            const r = await axios.delete(`${apiUrl}/api/files/${file.value.id}`, {
-                headers: {
-                    Authorization: localStorage.getItem('session_id'),
-                    'Content-Type': 'application/json'
-                }
-            });
-            let data = await r.data.data;
-
-            console.log('Delete', r);
-
-            active.value = false;
-
-            emit('reload-needed');
-
-            if (typeof data === 'object' && Object.keys(data).length > 0 && data.status && data.deleted && parseInt(data.deleted) > 0) {
-
-                notify({
-                    group: "success",
-                    title: "Done",
-                    text: `File ${file.value.basename} deleted`,
-                }, 5000);
-            } else {
-
-                notify({
-                    group: "error",
-                    title: "Error",
-                    text: `File ${file.value.basename} was not deleted`,
-                }, 10000);
-            }
-        };
-
-
-        const renameFile = async function() {
-
-            const r = await axios.put(`${apiUrl}/api/files/${file.value.id.value}/?path=${file.value.rel}`, {
-                headers: {
-                    Authorization: localStorage.getItem('session_id'),
-                    'Content-Type': 'application/json'
-                }
-            });
-            let data = await r.data.data;
-
-            if (typeof data === 'object' && Object.keys(data).length > 0 && data.status) {
-
-                return data;
-            }
-
-            return false;
-        };
-
-
-        const getIcon = function(viewType) {
-
-            switch (viewType) {
-
-                case 'text':
-
-                        return DocumentTextIcon;
-                    break;
-
-                case 'image':
-
-                        return PhotographIcon;
-                    break;
-
-                case 'video':
-
-                        return VideoCameraIcon;
-                    break;
-
-                case 'audio':
-
-                        return MusicNoteIcon;
-                    break;
-                default:
-
-                    return ShieldExclamationIcon;
-            }
-        };
-
-
-        const switchView = function(mimeStr) {
-
-            switch (mimeStr) {
-
-                case 'text/plain': case 'text/html': case 'text/css': case 'text/csv': case 'text/javascript ': case 'text/calendar': case 'text/xml':
-                        return 'text';
-                    break;
-
-                case 'image/jpeg': case 'image/jpg': case 'image/png': case 'image/apng': case 'image/gif': case 'image/bmp': case 'image/webp': case 'image/avif': case 'image/x-icon':
-                        return 'image';
-                    break;
-
-                case 'video/mp4': case 'video/3gpp': case 'video/ogg':
-                        return 'video';
-                    break;
-
-                case 'audio/mp4': case 'audio/mpeg': case 'audio/aac': case 'audio/aacp': case 'audio/ogg': case 'audio/webm': case 'audio/flac':
-                        return 'audio';
-                    break;
-                default:
-
-                    return 'bin';
-            }
-        }
-
-        return {
-            file,
-            active,
-            switchView,
-            apiUrl,
-            deleteFile,
-            renameFile,
-            getIcon,
-       }
+        notify({
+            group: "error",
+            title: "Error",
+            text: `File ${file.value.basename} was not deleted`,
+        }, 10000);
     }
-}
+};
+
+
+const renameFile = async function() {
+
+    const r = await axios.put(`${apiUrl}/api/files/${file.value.id.value}/?path=${file.value.rel}`, {
+        headers: {
+            Authorization: localStorage.getItem('session_id'),
+            'Content-Type': 'application/json'
+        }
+    });
+    let data = await r.data.data;
+
+    if (typeof data === 'object' && Object.keys(data).length > 0 && data.status) {
+
+        return data;
+    }
+
+    return false;
+};
+
+
+const getIcon = function(viewType) {
+
+    switch (viewType) {
+
+        case 'text':
+                return DocumentTextIcon;
+            break;
+        case 'image':
+                return PhotographIcon;
+            break;
+        case 'video':
+                return VideoCameraIcon;
+            break;
+        case 'audio':
+                return MusicNoteIcon;
+            break;
+        default:
+            return ShieldExclamationIcon;
+    }
+};
+
+
+const switchView = function(mimeStr) {
+
+    switch (mimeStr) {
+
+        case 'text/plain': case 'text/html': case 'text/css': case 'text/csv': case 'text/javascript ': case 'text/calendar': case 'text/xml':
+                return 'text';
+            break;
+
+        case 'image/jpeg': case 'image/jpg': case 'image/png': case 'image/apng': case 'image/gif': case 'image/bmp': case 'image/webp': case 'image/avif': case 'image/x-icon':
+                return 'image';
+            break;
+
+        case 'video/mp4': case 'video/3gpp': case 'video/ogg':
+                return 'video';
+            break;
+
+        case 'audio/mp4': case 'audio/mpeg': case 'audio/aac': case 'audio/aacp': case 'audio/ogg': case 'audio/webm': case 'audio/flac':
+                return 'audio';
+            break;
+        default:
+
+            return 'bin';
+    }
+};
 </script>

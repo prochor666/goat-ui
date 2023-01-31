@@ -294,6 +294,9 @@ export default {
 
         const apiUrl = route.meta.apiUrl;
 
+        console.log('Route dump', route.params);
+
+
         let saving = reactive({
             status: false,
             result: {

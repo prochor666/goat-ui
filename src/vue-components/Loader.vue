@@ -10,24 +10,14 @@
 
 </template>
 
-<script>
-export default {
-    props: {
-        text: {
-            type: String,
-            default: 'Loading...'
-        }
+<script setup>
+const props = defineProps({
+    text: {
+        type: String,
+        default: 'Loading...'
     },
+});
 
-    components: {
-    },
-    setup(props) {
 
-        let defaultText = props.text;
-
-        return {
-            defaultText
-        };
-    },
-};
+let defaultText = props.text;
 </script>

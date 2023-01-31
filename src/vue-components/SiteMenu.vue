@@ -145,14 +145,14 @@ export default {
                 icon: MenuAlt1Icon
             },
             {
-                name: 'Edit site',
-                href: 'site-detail',
+                name: 'Meta',
+                href: 'meta',
                 params: {
                     id: domains_id,
                     lang: lang,
                 },
-                current: route.name === 'site-detail',
-                icon: CubeIcon
+                current: route.name === 'meta' || route.name === 'meta-detail',
+                icon: TagIcon
             },
             {
                 name: 'File manager',
@@ -165,16 +165,18 @@ export default {
                 icon: FolderOpenIcon
             },
             {
-                name: 'Meta',
-                href: 'meta',
+                name: 'Edit site',
+                href: 'site-detail',
                 params: {
                     id: domains_id,
-                    lang: lang,
+                    //lang: lang,
                 },
-                current: route.name === 'meta' || route.name === 'meta-detail',
-                icon: TagIcon
+                current: route.name === 'site-detail',
+                icon: CubeIcon
             },
         ];
+
+        console.log('Navigaation', navigation);
 
         return {
             route,
